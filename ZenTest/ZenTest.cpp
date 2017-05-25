@@ -55,6 +55,51 @@ int main()
 {
 	LoadDll();
 	(*pZenInitialize)("myzen");
+	(*pZenClearBoard)();
+	(*pZenSetBoardSize)(19);
+	(*pZenSetKomi)(6.5);
+	bool isinitialized = (*pZenIsInitialized)();
+	//(*pZenPlay)(0,0,0);
+	//bool isThinking = (*pZenIsThinking)();
+	/*(*pZenStartThinking)(0);*/
+	//while ((*pZenIsThinking)())
+	//{
+	//}
+	/*(*pZenPlay)(0,0,0);
+	int a, b; bool ba, bb;
+	pZenReadGeneratedMove(a, b, ba, bb);*/
+
+
+	(*pZenAddStone)(3, 3, 1);
+
+
+
+	int size = (*pZenGetHistorySize)();//0
+	//int rate = (*pZenGetBestMoveRate)();
+	int boardColor = (*pZenGetBoardColor)(1, 1);//0
+	int nextColor = (*pZenGetNextColor)();//2
+	int bp = (*pZenGetNumBlackPrisoners)();//0
+	int wp = (*pZenGetNumWhitePrisoners)();//0
+	int arrayKnowledge[19][19];
+	int(*knowledge)[19] = arrayKnowledge;
+	(*pZenGetPriorKnowledge)(knowledge);//当前局面选点分值（先验知识）
+	int arrayStatictics[19][19];
+	int(*statictics)[19] = arrayStatictics;
+	(*pZenGetTerritoryStatictics)(statictics);
+	//(*pZenGetTopMoveInfo)();
+
+	(*pZenAddStone)(3, 3, 0);
+	boardColor = (*pZenGetBoardColor)(3, 3);
+	nextColor = (*pZenGetNextColor)();
+	(*pZenGetPriorKnowledge)(knowledge);//当前局面选点分值（先验知识）
+	(*pZenGetTerritoryStatictics)(statictics);
+
+	(*pZenAddStone)(9, 9, 2);
+	boardColor = (*pZenGetBoardColor)(9, 9);
+	nextColor = (*pZenGetNextColor)();
+	(*pZenGetPriorKnowledge)(knowledge);//当前局面选点分值（先验知识）
+	(*pZenGetTerritoryStatictics)(statictics);
+
 	return 0;
 }
 
