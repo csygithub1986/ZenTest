@@ -1,4 +1,7 @@
 #pragma once
+#define _EXTERN_C_  extern "C"  _declspec(dllexport)
+
+
 #define DllZenAddStone "?ZenAddStone@@YA_NHHH@Z"  // bool ZenAddStone(int,int,int)
 #define DllZenClearBoard "?ZenClearBoard@@YAXXZ"  // void ZenClearBoard(void)
 #define DllZenFixedHandicap "?ZenFixedHandicap@@YAXH@Z"  // void ZenFixedHandicap(int)
@@ -72,9 +75,11 @@ typedef void(*ZenTimeSettings)(int, int, int);
 typedef bool(*ZenUndo)(int);
 
 
+
+
 ZenInitialize pZenInitialize;//ok
 ZenClearBoard pZenClearBoard;//ok
-///get
+							 ///get
 ZenGetHistorySize pZenGetHistorySize;// int ZenGetHistorySize(void)
 ZenGetBestMoveRate pZenGetBestMoveRate;// int ZenGetBestMoveRate(void)
 ZenGetBoardColor pZenGetBoardColor;// int ZenGetBoardColor(int,int)
@@ -85,7 +90,7 @@ ZenGetPriorKnowledge pZenGetPriorKnowledge;// void ZenGetPriorKnowledge(int (* c
 ZenGetTerritoryStatictics pZenGetTerritoryStatictics;// void ZenGetTerritoryStatictics(int (* const)[19])
 ZenGetTopMoveInfo pZenGetTopMoveInfo;// void ZenGetTopMoveInfo(int,int &,int &,int &,float &,char *,int)
 
-///set
+									 ///set
 ZenSetNextColor pZenSetNextColor;
 ZenSetAmafWeightFactor pZenSetAmafWeightFactor;
 ZenSetBoardSize pZenSetBoardSize;//ok
@@ -112,4 +117,44 @@ ZenTimeLeft pZenTimeLeft;
 ZenTimeSettings pZenTimeSettings;
 ZenUndo pZenUndo;
 
-//void LoadDll();
+void LoadDll();
+
+
+
+
+_EXTERN_C_ 	 bool AddStone(int, int, int);
+_EXTERN_C_ 	 void ClearBoard(void) ;
+_EXTERN_C_ 	 void FixedHandicap(int);
+_EXTERN_C_ 	 int GetBestMoveRate(void);
+_EXTERN_C_ 	 int GetBoardColor(int, int);
+_EXTERN_C_ 	 int GetHistorySize(void);
+_EXTERN_C_ 	 int GetNextColor(void);
+_EXTERN_C_ 	 int GetNumBlackPrisoners(void);
+_EXTERN_C_ 	 int GetNumWhitePrisoners(void);
+_EXTERN_C_ 	 void GetPriorKnowledge(int(*const)[19]);
+_EXTERN_C_ 	 void GetTerritoryStatictics(int(*const)[19]);
+_EXTERN_C_ 	 void GetTopMoveInfo(int, int &, int &, int &, float &, char *, int);
+_EXTERN_C_ 	 void Initialize();
+_EXTERN_C_ 	 bool IsInitialized(void);
+_EXTERN_C_ 	 bool IsLegal(int, int, int);
+_EXTERN_C_ 	 bool IsSuicide(int, int, int);
+_EXTERN_C_ 	 bool IsThinking(void);
+_EXTERN_C_ 	 void MakeShapeName(int, int, int, char *, int);
+_EXTERN_C_ 	 void Pass(int);
+_EXTERN_C_ 	 bool Play(int, int, int);
+_EXTERN_C_ 	 void ReadGeneratedMove(int &, int &, bool &, bool &);
+_EXTERN_C_ 	 void SetAmafWeightFactor(float);
+_EXTERN_C_ 	 void SetBoardSize(int);
+_EXTERN_C_ 	 void SetDCNN(bool);
+_EXTERN_C_ 	 void SetKomi(float);
+_EXTERN_C_ 	 void SetMaxTime(float);
+_EXTERN_C_ 	 void SetNextColor(int);
+_EXTERN_C_ 	 void SetNumberOfSimulations(int);
+_EXTERN_C_ 	 void SetNumberOfThreads(int);
+_EXTERN_C_ 	 void SetPriorWeightFactor(float);
+_EXTERN_C_ 	 void StartThinking(int);
+_EXTERN_C_ 	 void StopThinking(void);
+_EXTERN_C_ 	 void TimeLeft(int, int, int);
+_EXTERN_C_ 	 void TimeSettings(int, int, int);
+_EXTERN_C_ 	 bool Undo(int);
+
