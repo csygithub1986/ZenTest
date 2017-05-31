@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,11 +32,8 @@ namespace ZenTestClient
             //    //arrayGrid.Children.Add(new TextBlock(new Run(i + "") { }) { Background = i % 2 == 0 ? Brushes.White : Brushes.Red });
             //    arrayGrid.Children.Add(new Label() { Content = i, Background = i % 2 == 0 ? Brushes.White : Brushes.Red });
             //}
-            string txt = "myzen";
-            IntPtr p = Marshal.StringToCoTaskMemAuto(txt);
-            DllImport.Initialize();
-            bool a = DllImport.IsInitialized();
-            DllImport.AddStone(3, 3, 1);
+            //string txt = "myzen";
+            //IntPtr p = Marshal.StringToCoTaskMemAuto(txt);
         }
 
         private DataTable MakeTableWithAutoIncrement()
@@ -60,6 +58,29 @@ namespace ZenTestClient
                 foreach (DataColumn column in table.Columns)
                 {
                     Console.WriteLine(row[column]);
+                }
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            //DataContext = new MainWindowViewModel();
+
+            //DllImport.Initialize();
+            //bool a = DllImport.IsInitialized();
+            //DllImport.AddStone(3, 3, 1);
+        }
+
+        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBox.SelectedItem != null)
+            {
+                MethodInfo mInfo = listBox.SelectedItem as MethodInfo;
+                ParameterInfo[] pInfos = mInfo.GetParameters();
+                foreach (ParameterInfo pInfo in pInfos)
+                {
+                    pInfo.GetType();
+                    //pInfo.
                 }
             }
         }

@@ -6,6 +6,18 @@
         xmlns:local="clr-namespace:ZenTestClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1280">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <local:Convertor x:Key="convertor"/>
+        <!--<DataTemplate DataType="local:ParameterBullet" x:Key="ParamTemplate" >
+            <StackPanel>
+                <Label Width="100" Content="{Binding ParameterInfo,Converter={StaticResource convertor}}"/>
+                <TextBox Text="{Binding Value}"/>
+            </StackPanel>
+        </DataTemplate>-->
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="600"/>
@@ -18,8 +30,25 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="600"/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="函数" />
-            <GroupBox Grid.Column="1" Header="参数"/>
+            <GroupBox Header="函数" >
+                <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}" DisplayMemberPath="Name" SelectionChanged="listBox_SelectionChanged"/>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="参数">
+                <Grid>
+                    <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 100">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="local:ParameterBullet"  >
+                                <StackPanel Orientation="Horizontal" Background="Red" HorizontalAlignment="Stretch">
+                                    <Label Width="100" Background="Green" Content="{Binding ParameterInfo,Converter={StaticResource convertor}}"/>
+                                    <TextBox Text="{Binding Value}" Background="Yellow"/>
+                                </StackPanel>
+                            </DataTemplate>
+                            
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Click="button_Click" x:Name="button" Content="运行" HorizontalAlignment="Left" Margin="51,510,0,0" VerticalAlignment="Top" Width="105" Height="36"/>
+                </Grid>
+            </GroupBox>
             <GroupBox Grid.Column="2" Header="数字结果">
                 <Grid/>
             </GroupBox>
