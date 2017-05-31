@@ -12,13 +12,14 @@ namespace ZenTestClient
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (targetType == typeof(ParameterBullet))
+            //if (targetType == typeof(System.Reflection))
+            //{
+            //Console.WriteLine(targetType.Name);
+            if ("ParamName".Equals(parameter))
             {
-                if ("ParamName".Equals(parameter))
-                {
-                    return (value as ParameterBullet).ParamInfo.ParameterType.Name;
-                }
+                return (value as System.Reflection.ParameterInfo).ParameterType.Name;
             }
+            //}
             return value;
         }
 

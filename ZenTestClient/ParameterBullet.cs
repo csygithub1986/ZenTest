@@ -25,9 +25,24 @@ namespace ZenTestClient
             }
         }
 
+        private object _Value;
 
-
-        public object Value { get; set; }
+        public object Value
+        {
+            get
+            {
+                if (ParamInfo.ParameterType.Equals(typeof(Int32)))
+                {
+                    return int.Parse(_Value.ToString());
+                }
+                return _Value;
+            }
+            set
+            {
+                _Value = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
+            }
+        }
 
     }
 }

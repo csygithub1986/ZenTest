@@ -62,13 +62,15 @@ namespace ZenTestClient
             }
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        //执行函数
+        private void BtnExecute_Click(object sender, RoutedEventArgs e)
         {
             //DataContext = new MainWindowViewModel();
 
             //DllImport.Initialize();
             //bool a = DllImport.IsInitialized();
             //DllImport.AddStone(3, 3, 1);
+
         }
 
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

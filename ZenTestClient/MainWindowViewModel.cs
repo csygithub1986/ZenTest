@@ -17,9 +17,35 @@ namespace ZenTestClient
         public MainWindowViewModel()
         {
             Type type = typeof(DllImport);
-            MethodInfo[] infos = type.GetMethods();
+            MethodInfo[] infos = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
             List<MethodInfo> list = infos.ToList();
             Methods = list;
+
+            ExecuteCommand = new CommandBase() { CanExecuteAction = CanExecute, ExecuteAction = Execute };
+        }
+
+        private void Execute(object obj)
+        {
+            Result = Method.Invoke(null, Parameters.Select(p => p.Value).ToArray());
+        }
+
+        private object _Result;
+
+        public object Result
+        {
+            get { return _Result; }
+            set
+            {
+                _Result = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
+            }
+        }
+
+
+        private bool CanExecute(object arg)
+        {
+            //return Method != null;
+            return true;
         }
 
         private List<MethodInfo> _Methods;
@@ -81,6 +107,7 @@ namespace ZenTestClient
             return obj;
         }
 
+        public CommandBase ExecuteCommand { get; set; }
 
     }
 }

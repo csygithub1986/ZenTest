@@ -11,12 +11,13 @@
     </Window.DataContext>
     <Window.Resources>
         <local:Convertor x:Key="convertor"/>
-        <!--<DataTemplate DataType="local:ParameterBullet" x:Key="ParamTemplate" >
-            <StackPanel>
-                <Label Width="100" Content="{Binding ParameterInfo,Converter={StaticResource convertor}}"/>
-                <TextBox Text="{Binding Value}"/>
+        
+        <DataTemplate DataType="{x:Type local:ParameterBullet}"><!--必须要有"{x:Type}-->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch"><!--stackPanel长度怎么弄-->
+                <Label Background="Green" Width="100" Content="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamName}"/>
+                <TextBox Text="{Binding Value}" HorizontalAlignment="Stretch"/>
             </StackPanel>
-        </DataTemplate>-->
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -36,25 +37,17 @@
             <GroupBox Grid.Column="1" Header="参数">
                 <Grid>
                     <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 100">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="local:ParameterBullet"  >
-                                <StackPanel Orientation="Horizontal" Background="Red" HorizontalAlignment="Stretch">
-                                    <Label Width="100" Background="Green" Content="{Binding ParameterInfo,Converter={StaticResource convertor}}"/>
-                                    <TextBox Text="{Binding Value}" Background="Yellow"/>
-                                </StackPanel>
-                            </DataTemplate>
-                            
-                        </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button Click="button_Click" x:Name="button" Content="运行" HorizontalAlignment="Left" Margin="51,510,0,0" VerticalAlignment="Top" Width="105" Height="36"/>
+                    <Button Command="{Binding ExecuteCommand}" Click="BtnExecute_Click" x:Name="button" Content="运行" HorizontalAlignment="Left" Margin="51,510,0,0" VerticalAlignment="Top" Width="105" Height="36"/>
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Column="2" Header="数字结果">
-                <Grid/>
+                <Grid>
+                    <TextBox Text="{Binding Result}" HorizontalAlignment="Left" Height="24" Margin="61,24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+                </Grid>
             </GroupBox>
             <GroupBox Grid.Column="3" Header="矩阵结果">
                 <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
-                <!--<DataGrid Name="datagrid" HeadersVisibility="None"></DataGrid>-->
             </GroupBox>
         </Grid>
         <GroupBox Header="日志" Grid.Row="1"/>
