@@ -24,16 +24,10 @@ namespace ZenTestClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        Label[][] textBlocks;
         public MainWindow()
         {
             InitializeComponent();
-            //for (int i = 0; i < 19 * 19; i++)
-            //{
-            //    //arrayGrid.Children.Add(new TextBlock(new Run(i + "") { }) { Background = i % 2 == 0 ? Brushes.White : Brushes.Red });
-            //    arrayGrid.Children.Add(new Label() { Content = i, Background = i % 2 == 0 ? Brushes.White : Brushes.Red });
-            //}
-            //string txt = "myzen";
-            //IntPtr p = Marshal.StringToCoTaskMemAuto(txt);
         }
 
         private DataTable MakeTableWithAutoIncrement()
@@ -85,6 +79,42 @@ namespace ZenTestClient
                     //pInfo.
                 }
             }
+        }
+
+        private void ShowArray(int[] array)
+        {
+            int index = 0;
+            for (int i = 0; i < 19; i++)
+            {
+                for (int j = 0; j < 19; j++)
+                {
+                    textBlocks[i][j].Content = array[index].ToString();
+                    index++;
+                }
+            }
+        }
+
+        private void window_Loaded(object sender, RoutedEventArgs e)
+        {
+            textBlocks = new Label[19][];
+            int order = 0;
+            for (int i = 0; i < 19; i++)
+            {
+                textBlocks[i] = new Label[19];
+                for (int j = 0; j < 19; j++)
+                {
+                    textBlocks[i][j] = new Label()
+                    {
+                        Background = (order++) % 2 == 0 ? Brushes.Wheat : Brushes.White,
+                        HorizontalContentAlignment = HorizontalAlignment.Center,
+                        VerticalContentAlignment = VerticalAlignment.Center,
+                        Padding = new Thickness(0)
+                    };
+                    arrayGrid.Children.Add(textBlocks[i][j]);
+                }
+            }
+
+          (DataContext as MainWindowViewModel).ArrayChanged += ShowArray;
         }
     }
 }

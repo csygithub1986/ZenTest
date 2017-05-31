@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace ZenTestClient
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public event Action<int[]> ArrayChanged;
 
         public MainWindowViewModel()
         {
@@ -22,11 +24,57 @@ namespace ZenTestClient
             Methods = list;
 
             ExecuteCommand = new CommandBase() { CanExecuteAction = CanExecute, ExecuteAction = Execute };
+
+            DllImport.Initialize();
+            DllImport.AddStone(3, 3, 1);
+           
         }
 
         private void Execute(object obj)
         {
-            Result = Method.Invoke(null, Parameters.Select(p => p.Value).ToArray());
+            //object[] paramArray = Parameters.Select(p => p.Value).ToArray();
+            //Result = Method.Invoke(null, paramArray);
+
+
+            //Int32[] re = new Int32[19 * 19];
+            ////for (int i = 0; i < 19; i++)
+            ////{
+            ////    re[i] = new int[19];
+            ////}
+            ////int[] re2 = re[0];
+            //Result = Method.Invoke(null, new object[] { re });
+            ////for (int i = 0; i < Parameters.Count; i++)
+            ////{
+            ////    if (Parameters[i].ParamInfo.IsRetval)
+            ////    {
+            ////        //暂时
+            ////        Console.WriteLine(re[i]);
+            ////    }
+            ////}
+
+
+            Int32[] outputReport = new Int32[19 * 19];
+            IntPtr ptr;
+
+            unsafe
+            {
+                fixed (int* pc = outputReport)
+                {
+                    ptr = new IntPtr(pc);
+                }
+            }
+
+            DllImport.GetTerritoryStatictics(ptr);//我靠，这都被我试出来了
+
+
+            //unsafe
+            //{
+            //    int* intP = (int*)ptr.ToPointer();
+            //}
+
+
+
+            ArrayChanged?.Invoke(outputReport);
         }
 
         private object _Result;
