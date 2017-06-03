@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ZenTestClient
@@ -12,14 +8,20 @@ namespace ZenTestClient
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //if (targetType == typeof(System.Reflection))
-            //{
-            //Console.WriteLine(targetType.Name);
             if ("ParamName".Equals(parameter))
             {
                 return (value as System.Reflection.ParameterInfo).ParameterType.Name;
             }
-            //}
+            else if ("ParamReadOnly".Equals(parameter))
+            {
+                //如果是ref参数，则禁用textbox
+                return (value as System.Reflection.ParameterInfo).IsRetval;
+            }
+            else if ("ParamEnable".Equals(parameter))
+            {
+                System.Reflection.ParameterInfo param = value as System.Reflection.ParameterInfo;
+                return param.ParameterType == typeof(int) || param.ParameterType == typeof(float) || param.ParameterType == typeof(bool);
+            }
             return value;
         }
 

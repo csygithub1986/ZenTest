@@ -17,7 +17,9 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                 <!--stackPanel长度怎么弄-->
                 <Label Background="Green" Width="80" Content="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamName}"/>
-                <TextBox Text="{Binding Value}" Width="80" HorizontalAlignment="Stretch"/>
+                <TextBox Text="{Binding Value}" Width="80" HorizontalAlignment="Stretch" 
+                         IsReadOnly="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamReadOnly}"
+                         IsEnabled="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamEnable}"/>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
@@ -32,13 +34,13 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="函数" >
-            <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}" DisplayMemberPath="Name" SelectionChanged="listBox_SelectionChanged"/>
+            <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}"  SelectionChanged="listBox_SelectionChanged"/>
         </GroupBox>
         <GroupBox Grid.Column="1" Header="参数">
             <Grid>
-                <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 150">
-                </ListBox>
-                <Button Command="{Binding ExecuteCommand}" Click="BtnExecute_Click" x:Name="button" Content="运行" HorizontalAlignment="Stretch" Margin="5,0,5,60" VerticalAlignment="Bottom" Height="36"/>
+                <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 150"/>
+
+                <Button Command="{Binding ExecuteCommand}" IsEnabled="{Binding BtnExecuteEnabled}" Click="BtnExecute_Click" x:Name="button" Content="运行" HorizontalAlignment="Stretch" Margin="5,0,5,60" VerticalAlignment="Bottom" Height="36"/>
                 <TextBox Text="{Binding Result}" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="36" Margin="5,0,5,10" IsReadOnly="True"/>
             </Grid>
         </GroupBox>

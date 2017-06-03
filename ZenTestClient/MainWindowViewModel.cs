@@ -4,9 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace ZenTestClient
 {
@@ -21,64 +19,62 @@ namespace ZenTestClient
             Type type = typeof(DllImport);
             MethodInfo[] infos = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
             List<MethodInfo> list = infos.ToList();
+            list.Sort(new Comparison<MethodInfo>((x, y) =>
+            {
+                return string.Compare(x.Name, y.Name);
+            }));
             Methods = list;
 
             ExecuteCommand = new CommandBase() { CanExecuteAction = CanExecute, ExecuteAction = Execute };
 
             DllImport.Initialize();
-            DllImport.AddStone(3, 3, 1);
-           
+            //DllImport.AddStone(3, 3, 1);
+
+            BtnExecuteEnabled = true;
         }
 
         private void Execute(object obj)
         {
-            //object[] paramArray = Parameters.Select(p => p.Value).ToArray();
-            //Result = Method.Invoke(null, paramArray);
+            BtnExecuteEnabled = false;
 
-
-            //Int32[] re = new Int32[19 * 19];
-            ////for (int i = 0; i < 19; i++)
-            ////{
-            ////    re[i] = new int[19];
-            ////}
-            ////int[] re2 = re[0];
-            //Result = Method.Invoke(null, new object[] { re });
-            ////for (int i = 0; i < Parameters.Count; i++)
-            ////{
-            ////    if (Parameters[i].ParamInfo.IsRetval)
-            ////    {
-            ////        //暂时
-            ////        Console.WriteLine(re[i]);
-            ////    }
-            ////}
-
-
-            Int32[] outputReport = new Int32[19 * 19];
-            IntPtr ptr;
-
-            unsafe
+            new Thread(() =>
             {
-                fixed (int* pc = outputReport)
+                object[] paramArray = Parameters.Select(p => p.Value).ToArray();
+                int[] output = null;
+
+                for (int i = 0; i < Parameters.Count; i++)
                 {
-                    ptr = new IntPtr(pc);
+                    if (Parameters[i].ParamInfo.ParameterType == typeof(int[]))
+                    {
+                        paramArray[i] = new int[19 * 19];
+                        output = (int[])paramArray[i];
+                    }
+                    else if (Parameters[i].ParamInfo.ParameterType == typeof(byte[]))
+                    {
+                        paramArray[i] = new byte[19 * 19];
+                    }
                 }
-            }
+                object result = Method.Invoke(null, paramArray);//Result用于输出
 
-            DllImport.GetTerritoryStatictics(ptr);//我靠，这都被我试出来了
+                App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Result = result;
+                    ArrayChanged?.Invoke(output);
+                    BtnExecuteEnabled = true;
+                }));
+            }).Start();
 
-
+            //IntPtr ptr;
             //unsafe
             //{
-            //    int* intP = (int*)ptr.ToPointer();
+            //    fixed (int* pc = outputReport)
+            //    {
+            //        ptr = new IntPtr(pc);
+            //    }
             //}
-
-
-
-            ArrayChanged?.Invoke(outputReport);
         }
 
-        private object _Result;
-
+        #region 属性
         public object Result
         {
             get { return _Result; }
@@ -88,15 +84,18 @@ namespace ZenTestClient
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Result"));
             }
         }
+        private object _Result;
 
-
-        private bool CanExecute(object arg)
+        public bool BtnExecuteEnabled
         {
-            //return Method != null;
-            return true;
+            get { return _BtnExecuteEnabled; }
+            set
+            {
+                _BtnExecuteEnabled = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BtnExecuteEnabled"));
+            }
         }
-
-        private List<MethodInfo> _Methods;
+        private bool _BtnExecuteEnabled;
 
         public List<MethodInfo> Methods
         {
@@ -107,8 +106,7 @@ namespace ZenTestClient
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Methods"));
             }
         }
-
-        private MethodInfo _Method;
+        private List<MethodInfo> _Methods;
 
         public MethodInfo Method
         {
@@ -128,9 +126,7 @@ namespace ZenTestClient
                 Parameters = collection;
             }
         }
-
-
-        private ObservableCollection<ParameterBullet> _Parameters;
+        private MethodInfo _Method;
 
         public ObservableCollection<ParameterBullet> Parameters
         {
@@ -141,8 +137,15 @@ namespace ZenTestClient
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Parameters"));
             }
         }
+        private ObservableCollection<ParameterBullet> _Parameters;
 
+        #endregion
 
+        private bool CanExecute(object arg)
+        {
+            //return Method != null;
+            return true;
+        }
 
         public object InvokeMethod(MethodInfo methodInfo, object[] parameters)
         {
