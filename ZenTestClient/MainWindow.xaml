@@ -34,7 +34,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="函数" >
-            <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}"  SelectionChanged="listBox_SelectionChanged"/>
+            <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}"  />
         </GroupBox>
         <GroupBox Grid.Column="1" Header="参数">
             <Grid>
@@ -45,7 +45,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
+        <GroupBox Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
             <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
         </GroupBox>
 

@@ -55,19 +55,19 @@ namespace ZenTestClient
 
         }
 
-        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listBox.SelectedItem != null)
-            {
-                MethodInfo mInfo = listBox.SelectedItem as MethodInfo;
-                ParameterInfo[] pInfos = mInfo.GetParameters();
-                foreach (ParameterInfo pInfo in pInfos)
-                {
-                    pInfo.GetType();
-                    //pInfo.
-                }
-            }
-        }
+        //private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (listBox.SelectedItem != null)
+        //    {
+        //        MethodInfo mInfo = listBox.SelectedItem as MethodInfo;
+        //        ParameterInfo[] pInfos = mInfo.GetParameters();
+        //        foreach (ParameterInfo pInfo in pInfos)
+        //        {
+        //            pInfo.GetType();
+        //            //pInfo.
+        //        }
+        //    }
+        //}
 
         private void ShowArray(int[] array)
         {

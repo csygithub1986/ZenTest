@@ -9,7 +9,17 @@ namespace ZenTestClient
 {
     public class CommandBase : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
 
         public Func<object, bool> CanExecuteAction;
         public Action<object> ExecuteAction;

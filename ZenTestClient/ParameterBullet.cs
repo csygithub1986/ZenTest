@@ -31,9 +31,20 @@ namespace ZenTestClient
         {
             get
             {
-                if (ParamInfo.ParameterType.Equals(typeof(Int32)))
+                if (_Value != null)
                 {
-                    return int.Parse(_Value.ToString());
+                    if (ParamInfo.ParameterType.Equals(typeof(int)))
+                    {
+                        return int.Parse(_Value.ToString());
+                    }
+                    if (ParamInfo.ParameterType.Equals(typeof(float)))
+                    {
+                        return float.Parse(_Value.ToString());
+                    }
+                    if (ParamInfo.ParameterType.Equals(typeof(double)))
+                    {
+                        return double.Parse(_Value.ToString());
+                    }
                 }
                 return _Value;
             }

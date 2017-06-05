@@ -1,7 +1,7 @@
 #pragma once
 #define _EXTERN_C_  extern "C"  _declspec(dllexport)
 
-
+#pragma region 函数名宏定义
 #define DllZenAddStone "?ZenAddStone@@YA_NHHH@Z"  // bool ZenAddStone(int,int,int)
 #define DllZenClearBoard "?ZenClearBoard@@YAXXZ"  // void ZenClearBoard(void)
 #define DllZenFixedHandicap "?ZenFixedHandicap@@YAXH@Z"  // void ZenFixedHandicap(int)
@@ -37,32 +37,34 @@
 #define DllZenTimeLeft "?ZenTimeLeft@@YAXHHH@Z"  // void ZenTimeLeft(int,int,int)
 #define DllZenTimeSettings "?ZenTimeSettings@@YAXHHH@Z"  // void ZenTimeSettings(int,int,int)
 #define DllZenUndo "?ZenUndo@@YA_NH@Z"  // bool ZenUndo(int)
+#pragma endregion
 
-typedef bool(*ZenAddStone)(int, int, int);
-typedef void(*ZenClearBoard)(void);
+#pragma region 函数指针宏定义
+typedef bool(*ZenAddStone)(int, int, int);//单纯的add，并非落子
+typedef void(*ZenClearBoard)(void);//清空棋盘
 typedef void(*ZenFixedHandicap)(int);
-typedef int(*ZenGetBestMoveRate)(void);
-typedef int(*ZenGetBoardColor)(int, int);
-typedef int(*ZenGetHistorySize)(void);
-typedef int(*ZenGetNextColor)(void);
-typedef int(*ZenGetNumBlackPrisoners)(void);
-typedef int(*ZenGetNumWhitePrisoners)(void);
+typedef int(*ZenGetBestMoveRate)(void);//要运行很长时间！！
+typedef int(*ZenGetBoardColor)(int, int);//查看棋盘某一点的颜色
+typedef int(*ZenGetHistorySize)(void);//历史步数
+typedef int(*ZenGetNextColor)(void);//查看下一步该谁走
+typedef int(*ZenGetNumBlackPrisoners)(void);//查看被吃子数
+typedef int(*ZenGetNumWhitePrisoners)(void);//查看被吃子数
 typedef void(*ZenGetPriorKnowledge)(int(*const)[19]);
 typedef void(*ZenGetTerritoryStatictics)(int(*const)[19]);
 typedef void(*ZenGetTopMoveInfo)(int, int &, int &, int &, float &, char *, int);
-typedef void(*ZenInitialize)(char const *);
-typedef bool(*ZenIsInitialized)(void);
-typedef bool(*ZenIsLegal)(int, int, int);
+typedef void(*ZenInitialize)(char const *);//初始化
+typedef bool(*ZenIsInitialized)(void);//是否初始化
+typedef bool(*ZenIsLegal)(int, int, int);//指的是落子的范围是否合法，没有判断禁入点或者颜色
 typedef bool(*ZenIsSuicide)(int, int, int);
 typedef bool(*ZenIsThinking)(void);
 typedef void(*ZenMakeShapeName)(int, int, int, char *, int);
-typedef void(*ZenPass)(int);
-typedef bool(*ZenPlay)(int, int, int);
+typedef void(*ZenPass)(int);//pass
+typedef bool(*ZenPlay)(int, int, int);//落子，影响nextcolor和history
 typedef void(*ZenReadGeneratedMove)(int &, int &, bool &, bool &);
 typedef void(*ZenSetAmafWeightFactor)(float);
 typedef void(*ZenSetBoardSize)(int);
 typedef void(*ZenSetDCNN)(bool);
-typedef void(*ZenSetKomi)(float);
+typedef void(*ZenSetKomi)(float);//设置贴目
 typedef void(*ZenSetMaxTime)(float);
 typedef void(*ZenSetNextColor)(int);
 typedef void(*ZenSetNumberOfSimulations)(int);
@@ -73,10 +75,9 @@ typedef void(*ZenStopThinking)(void);
 typedef void(*ZenTimeLeft)(int, int, int);
 typedef void(*ZenTimeSettings)(int, int, int);
 typedef bool(*ZenUndo)(int);
+#pragma endregion
 
-
-
-
+#pragma region 函数指针申明
 ZenInitialize pZenInitialize;//ok
 ZenClearBoard pZenClearBoard;//ok
 							 ///get
@@ -116,12 +117,9 @@ ZenStopThinking pZenStopThinking;
 ZenTimeLeft pZenTimeLeft;
 ZenTimeSettings pZenTimeSettings;
 ZenUndo pZenUndo;
+#pragma endregion
 
-void LoadDll();
-
-
-
-
+#pragma region Extern
 _EXTERN_C_ 	 bool AddStone(int, int, int);
 _EXTERN_C_ 	 void ClearBoard(void) ;
 _EXTERN_C_ 	 void FixedHandicap(int);
@@ -157,4 +155,10 @@ _EXTERN_C_ 	 void StopThinking(void);
 _EXTERN_C_ 	 void TimeLeft(int, int, int);
 _EXTERN_C_ 	 void TimeSettings(int, int, int);
 _EXTERN_C_ 	 bool Undo(int);
+#pragma endregion
 
+/*
+2是黑，1是白，0是空
+Addstone，除了1和2，以外，都认为是1
+
+*/

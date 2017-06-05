@@ -27,7 +27,7 @@ namespace ZenTestClient
 
             ExecuteCommand = new CommandBase() { CanExecuteAction = CanExecute, ExecuteAction = Execute };
 
-            DllImport.Initialize();
+            DllImport.Initialize();//不调用initial，调用其他方法都要出错
             //DllImport.AddStone(3, 3, 1);
 
             BtnExecuteEnabled = true;
@@ -61,6 +61,11 @@ namespace ZenTestClient
                     Result = result;
                     ArrayChanged?.Invoke(output);
                     BtnExecuteEnabled = true;
+                    for (int j = 0; j < paramArray.Length; j++)
+                    {
+                        Parameters[j].Value = paramArray[j];
+                    }
+
                 }));
             }).Start();
 
@@ -116,7 +121,7 @@ namespace ZenTestClient
                 _Method = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Method"));
 
-                Parameters = new ObservableCollection<ParameterBullet>();
+                //Parameters = new ObservableCollection<ParameterBullet>();
                 ParameterInfo[] parameters = _Method.GetParameters();
                 var collection = new ObservableCollection<ParameterBullet>();
                 foreach (var param in parameters)
@@ -143,8 +148,8 @@ namespace ZenTestClient
 
         private bool CanExecute(object arg)
         {
-            //return Method != null;
-            return true;
+            return Method != null;
+            //return true;
         }
 
         public object InvokeMethod(MethodInfo methodInfo, object[] parameters)
