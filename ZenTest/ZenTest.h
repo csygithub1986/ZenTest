@@ -49,8 +49,8 @@ typedef int(*ZenGetHistorySize)(void);//历史步数
 typedef int(*ZenGetNextColor)(void);//查看下一步该谁走
 typedef int(*ZenGetNumBlackPrisoners)(void);//查看被吃子数
 typedef int(*ZenGetNumWhitePrisoners)(void);//查看被吃子数
-typedef void(*ZenGetPriorKnowledge)(int(*const)[19]);
-typedef void(*ZenGetTerritoryStatictics)(int(*const)[19]);
+typedef void(*ZenGetPriorKnowledge)(int(*const)[19]);//落子的分值
+typedef void(*ZenGetTerritoryStatictics)(int(*const)[19]);//棋盘上某一点被控制的分值，1000完全黑控制，-1000为白控制
 typedef void(*ZenGetTopMoveInfo)(int, int &, int &, int &, float &, char *, int);
 typedef void(*ZenInitialize)(char const *);//初始化
 typedef bool(*ZenIsInitialized)(void);//是否初始化
@@ -67,7 +67,7 @@ typedef void(*ZenSetDCNN)(bool);
 typedef void(*ZenSetKomi)(float);//设置贴目
 typedef void(*ZenSetMaxTime)(float);
 typedef void(*ZenSetNextColor)(int);
-typedef void(*ZenSetNumberOfSimulations)(int);
+typedef void(*ZenSetNumberOfSimulations)(int);//与日志中的Playout对应，大概1000需要跑1s。
 typedef void(*ZenSetNumberOfThreads)(int);
 typedef void(*ZenSetPriorWeightFactor)(float);
 typedef void(*ZenStartThinking)(int);

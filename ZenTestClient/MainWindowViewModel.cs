@@ -32,7 +32,7 @@ namespace ZenTestClient
             IsSuicideCommand = new CommandBase() { ExecuteAction = ExcuteIsSuicide };
             IsLegalCommand = new CommandBase() { ExecuteAction = ExcuteIsLegal };
 
-            DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
+            //DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
             //DllImport.AddStone(3, 3, 1);
 
             BtnExecuteEnabled = true;
@@ -78,22 +78,48 @@ namespace ZenTestClient
             WriteMsgLine("ExcuteIsSuicide Over");
         }
 
+        int count = 3;
+
         private void ExcuteVsSelf(object obj)
         {
-            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + ".log";
+            //if (count<=0)
+            //{
+            //    return;
+            //}
+            //count--;
+            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";
+
+            DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".txt");//不调用initial，调用其他方法都要出错
             DllImport.ClearBoard();
 
             new Thread(() =>
             {
-                ClientLog.WriteLog("(");
+                ClientLog.WriteLog("(;WP[Zen]BP[Zen]");
                 while (true)
                 {
                     int nextColor = DllImport.GetNextColor();
-                    DllImport.StartThinking(nextColor);
-                    Thread.Sleep(1500);
-                    DllImport.StopThinking();
 
-                    bool isThinking = DllImport.IsThinking();
+                    if (nextColor == 2)
+                    {
+                        DllImport.SetMaxTime(3.1f);
+                    }
+                    else
+                    {
+                        DllImport.SetMaxTime(0.5f);
+                    }
+
+                    DllImport.StartThinking(nextColor);
+                    if (nextColor == 2)
+                    {
+                        Thread.Sleep(4000);
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    DllImport.StopThinking();//必须stopThinking，不然导致错误
+
+                    //bool isThinking = DllImport.IsThinking();
 
 
                     int p0 = 0, p1 = 0;
@@ -110,21 +136,21 @@ namespace ZenTestClient
                     //msg = string.Format("Turn:{0}, TopMoveInfo:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + para1), para2 + 1, para3, para4);
                     //ClientLog.WriteLog(msg);
 
-                    //int[] output = new int[19 * 19];
-                    //DllImport.GetTerritoryStatictics(output);
-                    //ArrayChanged?.Invoke(output);
+                    int[] output = new int[19 * 19];
+                    DllImport.GetPriorKnowledge(output);
+                    ArrayChanged?.Invoke(output);
 
                     if (p2 || p3)
                     {
                         ClientLog.WriteLog(")");
                         MessageBox.Show("down");
+                        //ExcuteVsSelf(null);
                         return;
                     }
 
                     DllImport.Play(p0, p1, nextColor);
 
                     ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
-                    //return;
                 }
             }).Start();
         }
