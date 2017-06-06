@@ -31,8 +31,7 @@ namespace ZenTestClient
                     f.Close();
                 }
                 System.IO.StreamWriter f2 = new System.IO.StreamWriter(FilePath, true, System.Text.Encoding.GetEncoding("gb2312"));
-                //f2.WriteLine(DateTime.Now.ToString("MM-dd HH:mm:ss") + "  " + info);
-                f2.WriteLine(info);
+                f2.Write(info);
                 f2.Close();
                 f2.Dispose();
             }

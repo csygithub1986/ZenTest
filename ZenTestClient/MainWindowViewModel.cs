@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Windows;
 
 namespace ZenTestClient
 {
@@ -84,11 +85,12 @@ namespace ZenTestClient
 
             new Thread(() =>
             {
+                ClientLog.WriteLog("(");
                 while (true)
                 {
                     int nextColor = DllImport.GetNextColor();
                     DllImport.StartThinking(nextColor);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1500);
                     DllImport.StopThinking();
 
                     bool isThinking = DllImport.IsThinking();
@@ -98,21 +100,30 @@ namespace ZenTestClient
                     bool p2 = false, p3 = false;
                     DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
                     string msg = string.Format("Turn:{0}, Generated:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + p0), p1 + 1, p2, p3);
-                    ClientLog.WriteLog(msg);
+                    //ClientLog.WriteLog(msg);
                     WriteMsgLine(msg);
 
-                    int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
-                    float para4 = 0;
-                    byte[] para5 = new byte[19 * 19];
-                    DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref para4, para5, para6);
-                    msg = string.Format("Turn:{0}, TopMoveInfo:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + para1), para2 + 1, para3, para4);
-                    ClientLog.WriteLog(msg);
+                    //int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
+                    //float para4 = 0;
+                    //byte[] para5 = new byte[19 * 19];
+                    //DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref para4, para5, para6);
+                    //msg = string.Format("Turn:{0}, TopMoveInfo:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + para1), para2 + 1, para3, para4);
+                    //ClientLog.WriteLog(msg);
 
                     //int[] output = new int[19 * 19];
                     //DllImport.GetTerritoryStatictics(output);
                     //ArrayChanged?.Invoke(output);
 
+                    if (p2 || p3)
+                    {
+                        ClientLog.WriteLog(")");
+                        MessageBox.Show("down");
+                        return;
+                    }
+
                     DllImport.Play(p0, p1, nextColor);
+
+                    ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
                     //return;
                 }
             }).Start();
