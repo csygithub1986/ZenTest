@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClientLog.cs" />
     <Compile Include="CommandBase.cs" />
     <Compile Include="Convertor.cs" />
     <Compile Include="ParameterBullet.cs" />

@@ -23,32 +23,49 @@
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="3*" MinHeight="200"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="100"/>
-            <ColumnDefinition Width="*" MinWidth="100"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <GroupBox Header="函数" >
-            <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}"  />
-        </GroupBox>
-        <GroupBox Grid.Column="1" Header="参数">
-            <Grid>
-                <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 150"/>
+    <DockPanel>
+        <ToolBarPanel DockPanel.Dock="Top">
+            <ToolBar >
+                <Menu>
+                    <MenuItem Header="测试">
+                        <MenuItem Header="VsSelf" Command="{Binding VsSelfCommand}"/>
+                        <MenuItem Header="IsSuicide" Command="{Binding IsSuicideCommand}"/>
+                        <MenuItem Header="IsLegal" Command="{Binding IsLegalCommand}"/>
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+        </ToolBarPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" MinHeight="200"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="100"/>
+                <ColumnDefinition Width="*" MinWidth="100"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="函数" >
+                <ListBox x:Name="listBox" ItemsSource="{Binding Methods}" SelectedItem="{Binding Method}"  />
+            </GroupBox>
+            <GroupBox Grid.Column="1" Header="参数">
+                <Grid>
+                    <ListBox ItemsSource="{Binding Parameters}"  Margin="0 0 0 150"/>
 
-                <Button Command="{Binding ExecuteCommand}" IsEnabled="{Binding BtnExecuteEnabled}" Click="BtnExecute_Click" x:Name="button" Content="运行" HorizontalAlignment="Stretch" Margin="5,0,5,60" VerticalAlignment="Bottom" Height="36"/>
-                <TextBox Text="{Binding Result}" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="36" Margin="5,0,5,10" IsReadOnly="True"/>
-            </Grid>
-        </GroupBox>
+                    <Button Command="{Binding ExecuteCommand}" IsEnabled="{Binding BtnExecuteEnabled}" Click="BtnExecute_Click" x:Name="button" Content="运行" HorizontalAlignment="Stretch" Margin="5,0,5,60" VerticalAlignment="Bottom" Height="36"/>
+                    <TextBox Text="{Binding Result}" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="36" Margin="5,0,5,10" IsReadOnly="True"/>
+                </Grid>
+            </GroupBox>
 
-        <GroupBox Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
-            <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
-        </GroupBox>
+            <GroupBox Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
+                <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
+            </GroupBox>
 
-        <GroupBox Header="日志" Grid.Row="1" Grid.ColumnSpan="2"/>
-    </Grid>
+            <GroupBox Header="日志" Grid.Row="1" Grid.ColumnSpan="2">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding OutputMsg}"/>
+                </ScrollViewer>
+            </GroupBox>
+        </Grid>
+    </DockPanel>
 </Window>

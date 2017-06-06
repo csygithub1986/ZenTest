@@ -38,7 +38,7 @@ namespace ZenTestClient
         public static extern int GetNumWhitePrisoners();
 
         [DllImport(DLLNAME, EntryPoint = "?ZenInitialize@@YAXPBD@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Initialize();
+        public static extern void Initialize(string param0);
 
         [DllImport(DLLNAME, EntryPoint = "?ZenIsInitialized@@YA_NXZ", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool IsInitialized();
@@ -104,10 +104,10 @@ namespace ZenTestClient
         public static extern bool Undo(int param0);
 
         [DllImport(DLLNAME, EntryPoint = "?ZenGetTopMoveInfo@@YAXHAAH00AAMPADH@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetTopMoveInfo(int param0, ref int param1, ref int param2, ref int param3, ref float param4, byte[] param5, int param6);
+        public static extern void GetTopMoveInfo(int param0, ref int x, ref int y, ref int count, ref float winRate, byte[] param5, int param6);
 
         [DllImport(DLLNAME, EntryPoint = "?ZenReadGeneratedMove@@YAXAAH0AA_N1@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ReadGeneratedMove(ref int param0, ref int param1, ref bool param2, ref bool param3);
+        public static extern void ReadGeneratedMove(ref int x, ref int y, ref bool param2, ref bool param3);
 
 
         [DllImport(DLLNAME, EntryPoint = "?ZenGetPriorKnowledge@@YAXQAY0BD@H@Z", CallingConvention = CallingConvention.Cdecl)]
