@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ZenTestClient"
+        xmlns:local="clr-namespace:ZenTestClient" Closed="window_Closed"
         mc:Ignorable="d" Name="window" Loaded="window_Loaded"
         Title="MainWindow" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -27,10 +27,13 @@
         <ToolBarPanel DockPanel.Dock="Top">
             <ToolBar >
                 <Menu>
-                    <MenuItem Header="测试">
+                    <MenuItem Header="自我测试">
                         <MenuItem Header="VsSelf" Command="{Binding VsSelfCommand}"/>
                         <MenuItem Header="IsSuicide" Command="{Binding IsSuicideCommand}"/>
                         <MenuItem Header="IsLegal" Command="{Binding IsLegalCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="对外测试">
+                        <MenuItem Header="VsGnugo" Command="{Binding VsGnugoCommand}"/>
                     </MenuItem>
                 </Menu>
             </ToolBar>

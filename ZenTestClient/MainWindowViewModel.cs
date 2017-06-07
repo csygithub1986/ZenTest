@@ -13,6 +13,12 @@ namespace ZenTestClient
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event Action OnExit;
+
+        public void Exit()
+        {
+            OnExit?.Invoke();
+        }
 
         public event Action<int[]> ArrayChanged;
 
@@ -31,11 +37,75 @@ namespace ZenTestClient
             VsSelfCommand = new CommandBase() { ExecuteAction = ExcuteVsSelf };
             IsSuicideCommand = new CommandBase() { ExecuteAction = ExcuteIsSuicide };
             IsLegalCommand = new CommandBase() { ExecuteAction = ExcuteIsLegal };
-
+            VsGnugoCommand= new CommandBase() { ExecuteAction = ExcuteVsGnugo };
             DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
             //DllImport.AddStone(3, 3, 1);
 
             BtnExecuteEnabled = true;
+        }
+
+        private void ExcuteVsGnugo(object obj)
+        {
+            VsGnugo vsgnugo = new VsGnugo();
+            OnExit += vsgnugo.Exit;
+            vsgnugo.OnMsgOutput += Vsgnugo_OnMsgOutput;
+            vsgnugo.Start();
+
+
+
+            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + ".log";
+            DllImport.ClearBoard();
+
+            new Thread(() =>
+            {
+                ClientLog.WriteLog("(");
+                while (true)
+                {
+                    int nextColor = DllImport.GetNextColor();
+                    DllImport.StartThinking(nextColor);
+                    Thread.Sleep(1500);
+                    DllImport.StopThinking();
+
+                    bool isThinking = DllImport.IsThinking();
+
+
+                    int p0 = 0, p1 = 0;
+                    bool p2 = false, p3 = false;
+                    DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
+                    string msg = string.Format("Turn:{0}, Generated:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + p0), p1 + 1, p2, p3);
+                    //ClientLog.WriteLog(msg);
+                    WriteMsgLine(msg);
+
+                    //int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
+                    //float para4 = 0;
+                    //byte[] para5 = new byte[19 * 19];
+                    //DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref para4, para5, para6);
+                    //msg = string.Format("Turn:{0}, TopMoveInfo:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + para1), para2 + 1, para3, para4);
+                    //ClientLog.WriteLog(msg);
+
+                    //int[] output = new int[19 * 19];
+                    //DllImport.GetTerritoryStatictics(output);
+                    //ArrayChanged?.Invoke(output);
+
+                    if (p2 || p3)
+                    {
+                        ClientLog.WriteLog(")");
+                        MessageBox.Show("down");
+                        return;
+                    }
+
+                    DllImport.Play(p0, p1, nextColor);
+
+                    ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
+                    //return;
+                }
+            }).Start();
+
+        }
+
+        private void Vsgnugo_OnMsgOutput(string obj)
+        {
+            WriteMsgLine(obj);
         }
 
         private void ExcuteIsLegal(object obj)
@@ -278,7 +348,8 @@ namespace ZenTestClient
         public CommandBase VsSelfCommand { get; set; }
         public CommandBase IsSuicideCommand { get; set; }
         public CommandBase IsLegalCommand { get; set; }
-
+        public CommandBase VsGnugoCommand { get; set; }
+        
         private void WriteMsgLine(string msg)
         {
             App.Current.Dispatcher.BeginInvoke(new Action(() =>

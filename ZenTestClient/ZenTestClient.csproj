@@ -61,6 +61,7 @@
     <Compile Include="CommandBase.cs" />
     <Compile Include="Convertor.cs" />
     <Compile Include="ParameterBullet.cs" />
+    <Compile Include="VsGnugo.cs" />
     <Compile Include="ZenMethod.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

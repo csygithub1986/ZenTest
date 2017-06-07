@@ -112,5 +112,11 @@ namespace ZenTestClient
 
           (DataContext as MainWindowViewModel).ArrayChanged += ShowArray;
         }
+
+        private void window_Closed(object sender, EventArgs e)
+        {
+            (DataContext as MainWindowViewModel).Exit();
+            Environment.Exit(0);
+        }
     }
 }
