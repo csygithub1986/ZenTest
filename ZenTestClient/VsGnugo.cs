@@ -9,15 +9,18 @@ using System.Threading.Tasks;
 
 namespace ZenTestClient
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class VsGnugo
     {
-        public event Action<string> OnMsgOutput;
+        public event Action<string, Action<int, string>> OnMsgOutput;
         Process process;
         public void Start()
         {
             new Thread(() =>
             {
-                ProcessStartInfo psi = new ProcessStartInfo(@"E:\gnu go\original\gnugo-3.8\interface\Debug\gnugo.exe");
+                ProcessStartInfo psi = new ProcessStartInfo(@"gnugo.exe");
                 psi.RedirectStandardOutput = true;
                 psi.RedirectStandardInput = true;
                 psi.WindowStyle = ProcessWindowStyle.Hidden;
@@ -29,7 +32,7 @@ namespace ZenTestClient
                 {
                     while ((msg = process.StandardOutput.ReadLine()) != null)
                     {
-                        OnMsgOutput?.Invoke(msg);
+                        OnMsgOutput?.Invoke(msg, InputMove);
                     }
                 }
                 catch (Exception)

@@ -40,7 +40,7 @@
         </ToolBarPanel>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" MinHeight="200"/>
+                <RowDefinition Height="*" MinHeight="200"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -60,7 +60,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Visibility="Visible" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
+            <GroupBox Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
                 <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
             </GroupBox>
 
