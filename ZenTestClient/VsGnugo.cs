@@ -10,7 +10,10 @@ using System.Threading.Tasks;
 namespace ZenTestClient
 {
     /// <summary>
-    /// 
+    /// 注意：
+    /// 1、gnugo纵坐标位1~19，非0~18
+    /// 2、跳过了I坐标，H过了是J
+    /// 3、纵坐标1在底部，19在顶部，和zen相反（但不影响程序逻辑）
     /// </summary>
     public class VsGnugo
     {
@@ -32,7 +35,11 @@ namespace ZenTestClient
                 {
                     while ((msg = process.StandardOutput.ReadLine()) != null)
                     {
-                        OnMsgOutput?.Invoke(msg, InputMove);
+                        OnMsgOutput?.Invoke(msg, InputMove);//"= resign"
+                        if (msg.Contains("resign"))
+                        {
+                            return;
+                        }
                     }
                 }
                 catch (Exception)
@@ -52,6 +59,7 @@ namespace ZenTestClient
         {
             process.StandardInput.WriteLine("play " + (color == 1 ? "white " : "black ") + move);
             process.StandardInput.WriteLine("genmove " + (color == 1 ? "black" : "white"));
+            //Console.WriteLine("gnugo\t" + (3 - color));
         }
         public void Exit()
         {

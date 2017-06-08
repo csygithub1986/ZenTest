@@ -75,9 +75,16 @@ namespace ZenTestClient
 
                 DllImport.Play(p0, p1, nextColor);
                 string msg = string.Format("Zen:\t{0}", "" + (char)('A' + p0) + (p1 + 1));
-                WriteMsgLine(msg);
+                Console.WriteLine(msg);//WriteMsgLine(msg);
                 ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
-                vsgnugo.InputMove(nextColor, "" + (char)('A' + p0) + (p1 + 1));
+
+                //nextColor = DllImport.GetNextColor();
+                char gnuX = (char)('A' + p0);
+                if (gnuX > 'H')
+                {
+                    gnuX++;
+                }
+                vsgnugo.InputMove(nextColor, "" + gnuX + (p1 + 1));
 
             }).Start();
 
@@ -94,6 +101,12 @@ namespace ZenTestClient
                 WriteMsgLine("illegal");
                 return;
             }
+            if (obj.Contains("resign"))
+            {
+                ClientLog.WriteLog(")");
+                MessageBox.Show("done");
+                return;
+            }
             obj = obj.Substring(2);
 
             int nextColor = DllImport.GetNextColor();
@@ -101,17 +114,24 @@ namespace ZenTestClient
             {
 
             }
-            int x = char.Parse(obj.Substring(0, 1)) - 'A';
-            int y = int.Parse(obj.Substring(1, obj.Length - 1));
+
+            char gnugoOutX = char.Parse(obj.Substring(0, 1));
+            if (gnugoOutX > 'I')
+                gnugoOutX--;
+            int x = gnugoOutX - 'A';
+
+            int y = int.Parse(obj.Substring(1, obj.Length - 1)) - 1;
             DllImport.Play(x, y, nextColor);
             string msg = string.Format("gnugo:\t{0}", "" + obj);
-            WriteMsgLine(msg);
+            Console.WriteLine(msg);//WriteMsgLine(msg);
             ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
 
-            //Thread.Sleep(100);
-            //int nextColor2 = DllImport.GetNextColor();//这一条有时会得不到正确结果
-            int nextColor2 = 2;
+            int nextColor2 = DllImport.GetNextColor();//这一条有时会得不到正确结果
+            //int nextColor2 = 2;
+            if (nextColor2 == 1)
+            {
 
+            }
             DllImport.StartThinking(nextColor2);
             Thread.Sleep(1500);
             DllImport.StopThinking();
@@ -119,6 +139,12 @@ namespace ZenTestClient
             int p0 = 0, p1 = 0;
             bool p2 = false, p3 = false;
             DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
+
+
+            int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
+            float win = 0;
+            byte[] para5 = new byte[19 * 19];
+            DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref win, para5, para6);
 
             if (p2 || p3)
             {
@@ -128,10 +154,18 @@ namespace ZenTestClient
             }
 
             DllImport.Play(p0, p1, nextColor2);
-            msg = string.Format("Zen:\t{0}", "" + (char)('A' + p0) + (p1 + 1));
-            WriteMsgLine(msg);
+            //Console.WriteLine("zen\t" + (nextColor2));
+
+            msg = string.Format("Zen:\t{0}", "" + (char)('A' + p0) + (p1 + 1)+"\t  "+win.ToString("G2"));
+            Console.WriteLine(msg);//WriteMsgLine(msg);
             ClientLog.WriteLog(";" + (nextColor2 == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
-            inputMove(nextColor2, "" + (char)('A' + p0) + (p1 + 1));
+
+            char gnuX = (char)('A' + p0);
+            if (gnuX > 'H')
+            {
+                gnuX++;
+            }
+            inputMove(nextColor2, "" + gnuX + (p1 + 1));
         }
 
         private void ExcuteIsLegal(object obj)
@@ -197,7 +231,7 @@ namespace ZenTestClient
                     DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
                     string msg = string.Format("Turn:{0}, Generated:\t{1}{2}\t{3}\t{4}", nextColor, (char)('A' + p0), p1 + 1, p2, p3);
                     //ClientLog.WriteLog(msg);
-                    WriteMsgLine(msg);
+                    Console.WriteLine(msg);//WriteMsgLine(msg);
 
                     //int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
                     //float para4 = 0;
