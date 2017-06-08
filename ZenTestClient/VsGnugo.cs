@@ -45,7 +45,7 @@ namespace ZenTestClient
                             continue;
                         }
                         bool isOver = (bool)OnMsgOutput?.Invoke(msg, InputMove);//"= resign"
-                        if (msg.Contains("resign")|| msg.Contains("pass")|| isOver)
+                        if (msg.Contains("resign")|| msg.Contains("PASS")|| isOver)
                         {
                             process.StandardInput.WriteLine("quit");
                             return;

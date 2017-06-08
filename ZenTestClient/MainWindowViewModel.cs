@@ -15,7 +15,7 @@ namespace ZenTestClient
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action OnExit;
 
-        int testCount = 2;
+        int testCount =1;
 
         public void Exit()
         {
@@ -108,7 +108,7 @@ namespace ZenTestClient
                 ZenVsGnugoOver();
                 return true;
             }
-            if (obj.Contains("pass"))
+            if (obj.Contains("PASS"))
             {
                 ClientLog.WriteLog(")");
                 //MessageBox.Show("done");
