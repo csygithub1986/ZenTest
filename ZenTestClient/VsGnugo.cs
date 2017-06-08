@@ -17,7 +17,7 @@ namespace ZenTestClient
     /// </summary>
     public class VsGnugo
     {
-        public event Action<string, Action<int, string>> OnMsgOutput;
+        public event Func<string, Action<int, string>, bool> OnMsgOutput;
         Process process;
         public void Start()
         {
@@ -29,20 +29,30 @@ namespace ZenTestClient
                 psi.WindowStyle = ProcessWindowStyle.Hidden;
                 psi.UseShellExecute = false;
                 process = Process.Start(psi);
+                process.StandardInput.WriteLine("1 fixed_handicap 9");
 
                 string msg;
                 try
                 {
                     while ((msg = process.StandardOutput.ReadLine()) != null)
                     {
-                        OnMsgOutput?.Invoke(msg, InputMove);//"= resign"
-                        if (msg.Contains("resign"))
+                        if (msg == null || msg.Length <= 2)
                         {
+                            continue;
+                        }
+                        if (msg.StartsWith("=1"))
+                        {
+                            continue;
+                        }
+                        bool isOver = (bool)OnMsgOutput?.Invoke(msg, InputMove);//"= resign"
+                        if (msg.Contains("resign")|| msg.Contains("pass")|| isOver)
+                        {
+                            process.StandardInput.WriteLine("quit");
                             return;
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return;
                 }
@@ -61,6 +71,12 @@ namespace ZenTestClient
             process.StandardInput.WriteLine("genmove " + (color == 1 ? "black" : "white"));
             //Console.WriteLine("gnugo\t" + (3 - color));
         }
+
+        public void GenMove(int color)
+        {
+            process.StandardInput.WriteLine("genmove " + (color == 2 ? "black" : "white"));
+        }
+
         public void Exit()
         {
             process.StandardInput.WriteLine("quit");

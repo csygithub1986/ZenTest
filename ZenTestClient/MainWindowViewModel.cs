@@ -15,6 +15,8 @@ namespace ZenTestClient
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action OnExit;
 
+        int testCount = 2;
+
         public void Exit()
         {
             OnExit?.Invoke();
@@ -51,12 +53,19 @@ namespace ZenTestClient
             vsgnugo.OnMsgOutput += Vsgnugo_OnMsgOutput;
             vsgnugo.Start();
 
-            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";
+            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "让九子" + testCount + "~ZenVsGnugo.sgf";
             DllImport.ClearBoard();
+            DllImport.FixedHandicap(9);
+            moveCount = 0;
+            ClientLog.WriteLog("(;AB[pd][dd][pp][jj][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");
+            //new Thread(() =>
+            // {
+            //     Thread.Sleep(2000);
+            //     vsgnugo.GenMove(2);
+            // }).Start();
 
             new Thread(() =>
             {
-                ClientLog.WriteLog("(;WP[gnugo]BP[Zen]");
                 int nextColor = DllImport.GetNextColor();
                 DllImport.StartThinking(nextColor);
                 Thread.Sleep(1500);
@@ -66,15 +75,10 @@ namespace ZenTestClient
                 bool p2 = false, p3 = false;
                 DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
 
-                //if (p2 || p3)
-                //{
-                //    ClientLog.WriteLog(")");
-                //    MessageBox.Show("done");
-                //    return;
-                //}
 
                 DllImport.Play(p0, p1, nextColor);
-                string msg = string.Format("Zen:\t{0}", "" + (char)('A' + p0) + (p1 + 1));
+                moveCount++;
+                string msg = string.Format(moveCount + "\tZen:\t{0}", "" + (char)('A' + p0) + (p1 + 1));
                 Console.WriteLine(msg);//WriteMsgLine(msg);
                 ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
 
@@ -90,30 +94,38 @@ namespace ZenTestClient
 
         }
 
-        private void Vsgnugo_OnMsgOutput(string obj, Action<int, string> inputMove)
+        private bool Vsgnugo_OnMsgOutput(string obj, Action<int, string> inputMove)
         {
-            if (obj == null || obj.Length <= 2)
-            {
-                return;
-            }
             if (obj.Contains("illegal move"))
             {
                 WriteMsgLine("illegal");
-                return;
+                return true;
             }
             if (obj.Contains("resign"))
             {
                 ClientLog.WriteLog(")");
-                MessageBox.Show("done");
-                return;
+                //MessageBox.Show("done");
+                ZenVsGnugoOver();
+                return true;
+            }
+            if (obj.Contains("pass"))
+            {
+                ClientLog.WriteLog(")");
+                //MessageBox.Show("done");
+                ZenVsGnugoOver();
+                return true;
             }
             obj = obj.Substring(2);
 
-            int nextColor = DllImport.GetNextColor();
-            if (nextColor == 2)
-            {
+            int opponentColor = DllImport.GetNextColor();
+            //分析对手
+            DllImport.StartThinking(opponentColor);
+            Thread.Sleep(1500);
+            DllImport.StopThinking();
+            int opX = 0, opY = 0;
+            bool opPass = false, opResign = false;
+            DllImport.ReadGeneratedMove(ref opX, ref opY, ref opPass, ref opResign);
 
-            }
 
             char gnugoOutX = char.Parse(obj.Substring(0, 1));
             if (gnugoOutX > 'I')
@@ -121,51 +133,74 @@ namespace ZenTestClient
             int x = gnugoOutX - 'A';
 
             int y = int.Parse(obj.Substring(1, obj.Length - 1)) - 1;
-            DllImport.Play(x, y, nextColor);
-            string msg = string.Format("gnugo:\t{0}", "" + obj);
+            DllImport.Play(x, y, opponentColor);
+            moveCount++;
+
+            string msg = string.Format(moveCount + "\tgnugo:\t{0}", "" + obj);
             Console.WriteLine(msg);//WriteMsgLine(msg);
-            ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
+            ClientLog.WriteLog(";" + (opponentColor == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
+            if (x != opX || y != opY)
+            {
+                ClientLog.WriteLog("LB[" + (char)('a' + opX) + (char)('a' + opY) + ":A]");
+                //ClientLog.WriteLog("LB[" + (char)('a' + opX) + (char)('a' + opY) + ":A]C[Zen认为A点可能更好]");
+            }
 
             int nextColor2 = DllImport.GetNextColor();//这一条有时会得不到正确结果
-            //int nextColor2 = 2;
-            if (nextColor2 == 1)
-            {
-
-            }
             DllImport.StartThinking(nextColor2);
             Thread.Sleep(1500);
             DllImport.StopThinking();
 
-            int p0 = 0, p1 = 0;
-            bool p2 = false, p3 = false;
-            DllImport.ReadGeneratedMove(ref p0, ref p1, ref p2, ref p3);
+            int selfX = 0, selfY = 0;
+            bool selfPass = false, selfResign = false;
+            DllImport.ReadGeneratedMove(ref selfX, ref selfY, ref selfPass, ref selfResign);
 
 
             int para0 = 0, para1 = 0, para2 = 0, para3 = 0, para6 = 0;
-            float win = 0;
+            float winning = 0;
             byte[] para5 = new byte[19 * 19];
-            DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref win, para5, para6);
+            DllImport.GetTopMoveInfo(para0, ref para1, ref para2, ref para3, ref winning, para5, para6);
 
-            if (p2 || p3)
+            if (selfPass || selfResign)
             {
                 ClientLog.WriteLog(")");
-                MessageBox.Show("done");
-                return;
+                //MessageBox.Show("done");
+                ZenVsGnugoOver();
+                return true;
             }
 
-            DllImport.Play(p0, p1, nextColor2);
+            DllImport.Play(selfX, selfY, nextColor2);
+            moveCount++;
+
             //Console.WriteLine("zen\t" + (nextColor2));
 
-            msg = string.Format("Zen:\t{0}", "" + (char)('A' + p0) + (p1 + 1)+"\t  "+win.ToString("G2"));
+            msg = string.Format(moveCount + "\tZen:\t{0}", "" + (char)('A' + selfX) + (selfY + 1) + "\t  " + winning.ToString("G2"));
             Console.WriteLine(msg);//WriteMsgLine(msg);
-            ClientLog.WriteLog(";" + (nextColor2 == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
+            ClientLog.WriteLog(";" + (nextColor2 == 1 ? "W" : "B") + "[" + (char)('a' + selfX) + (char)('a' + selfY) + "]C[预估胜率：" + (winning * 100).ToString("G3") + "%]");
 
-            char gnuX = (char)('A' + p0);
+            char gnuX = (char)('A' + selfX);
             if (gnuX > 'H')
             {
                 gnuX++;
             }
-            inputMove(nextColor2, "" + gnuX + (p1 + 1));
+            inputMove(nextColor2, "" + gnuX + (selfY + 1));
+            return false;
+        }
+
+        private void ZenVsGnugoOver()
+        {
+            //让子加1
+            testCount--;
+            if (testCount <= 0)
+            {
+                return;
+            }
+
+            //等五秒钟继续
+            new Thread(() =>
+            {
+                Thread.Sleep(5000);
+                ExcuteVsGnugo(null);
+            }).Start();
         }
 
         private void ExcuteIsLegal(object obj)
@@ -208,11 +243,13 @@ namespace ZenTestClient
             WriteMsgLine("ExcuteIsSuicide Over");
         }
 
+        int moveCount;
+
         private void ExcuteVsSelf(object obj)
         {
             ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";
             DllImport.ClearBoard();
-
+            moveCount = 0;
             new Thread(() =>
             {
                 ClientLog.WriteLog("(;WP[Zen]BP[Zen]");
@@ -247,11 +284,12 @@ namespace ZenTestClient
                     if (p2 || p3)
                     {
                         ClientLog.WriteLog(")");
-                        MessageBox.Show("down");
+                        //MessageBox.Show("down");
                         return;
                     }
 
                     DllImport.Play(p0, p1, nextColor);
+                    moveCount++;
 
                     ClientLog.WriteLog(";" + (nextColor == 1 ? "W" : "B") + "[" + (char)('a' + p0) + (char)('a' + p1) + "]");
                     //return;
