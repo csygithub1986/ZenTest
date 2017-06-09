@@ -15,7 +15,7 @@ namespace ZenTestClient
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action OnExit;
 
-        int testCount =1;
+        int testCount = 3;
 
         public void Exit()
         {
@@ -56,6 +56,7 @@ namespace ZenTestClient
             ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "让九子" + testCount + "~ZenVsGnugo.sgf";
             DllImport.ClearBoard();
             DllImport.FixedHandicap(9);
+            DllImport.SetNumberOfSimulations(5000);
             moveCount = 0;
             ClientLog.WriteLog("(;AB[pd][dd][pp][jj][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");
             //new Thread(() =>
@@ -68,7 +69,7 @@ namespace ZenTestClient
             {
                 int nextColor = DllImport.GetNextColor();
                 DllImport.StartThinking(nextColor);
-                Thread.Sleep(1500);
+                Thread.Sleep(5000);
                 DllImport.StopThinking();
 
                 int p0 = 0, p1 = 0;
@@ -192,6 +193,7 @@ namespace ZenTestClient
             testCount--;
             if (testCount <= 0)
             {
+                MessageBox.Show("done");
                 return;
             }
 

@@ -107,7 +107,7 @@ namespace ZenTestClient
         public static extern void GetTopMoveInfo(int param0, ref int x, ref int y, ref int count, ref float winRate, byte[] param5, int param6);
 
         [DllImport(DLLNAME, EntryPoint = "?ZenReadGeneratedMove@@YAXAAH0AA_N1@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ReadGeneratedMove(ref int x, ref int y, ref bool param2, ref bool param3);
+        public static extern void ReadGeneratedMove(ref int x, ref int y, ref bool isPass, ref bool isResign);
 
 
         [DllImport(DLLNAME, EntryPoint = "?ZenGetPriorKnowledge@@YAXQAY0BD@H@Z", CallingConvention = CallingConvention.Cdecl)]

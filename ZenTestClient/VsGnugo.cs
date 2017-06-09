@@ -26,6 +26,7 @@ namespace ZenTestClient
                 ProcessStartInfo psi = new ProcessStartInfo(@"gnugo.exe");
                 psi.RedirectStandardOutput = true;
                 psi.RedirectStandardInput = true;
+                psi.CreateNoWindow = true;
                 psi.WindowStyle = ProcessWindowStyle.Hidden;
                 psi.UseShellExecute = false;
                 process = Process.Start(psi);

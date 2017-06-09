@@ -1,0 +1,5 @@
+Turn:2, Generated:	16	3	False	False
+					是否pass	是否投降
+
+Turn:2, TopMoveInfo:	16	3	509	0.4872299	0
+                                        count   胜率

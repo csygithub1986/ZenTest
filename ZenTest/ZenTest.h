@@ -42,7 +42,7 @@
 #pragma region 函数指针宏定义
 typedef bool(*ZenAddStone)(int, int, int);//单纯的add，并非落子
 typedef void(*ZenClearBoard)(void);//清空棋盘
-typedef void(*ZenFixedHandicap)(int);
+typedef void(*ZenFixedHandicap)(int);//设置让子
 typedef int(*ZenGetBestMoveRate)(void);//要运行很长时间！！
 typedef int(*ZenGetBoardColor)(int, int);//查看棋盘某一点的颜色
 typedef int(*ZenGetHistorySize)(void);//历史步数
@@ -55,26 +55,26 @@ typedef void(*ZenGetTopMoveInfo)(int, int &, int &, int &, float &, char *, int)
 typedef void(*ZenInitialize)(char const *);//初始化
 typedef bool(*ZenIsInitialized)(void);//是否初始化
 typedef bool(*ZenIsLegal)(int, int, int);//指的是落子的范围是否合法，没有判断禁入点或者颜色
-typedef bool(*ZenIsSuicide)(int, int, int);
-typedef bool(*ZenIsThinking)(void);
+typedef bool(*ZenIsSuicide)(int, int, int);//                   ?????搞不懂，19个横坐标和12个纵坐标全部都是suicide
+typedef bool(*ZenIsThinking)(void);//                           ????为何总是thinking
 typedef void(*ZenMakeShapeName)(int, int, int, char *, int);
 typedef void(*ZenPass)(int);//pass
 typedef bool(*ZenPlay)(int, int, int);//落子，影响nextcolor和history
 typedef void(*ZenReadGeneratedMove)(int &, int &, bool &, bool &);
 typedef void(*ZenSetAmafWeightFactor)(float);
-typedef void(*ZenSetBoardSize)(int);
+typedef void(*ZenSetBoardSize)(int);//设置棋盘大小
 typedef void(*ZenSetDCNN)(bool);
 typedef void(*ZenSetKomi)(float);//设置贴目
 typedef void(*ZenSetMaxTime)(float);
-typedef void(*ZenSetNextColor)(int);
+typedef void(*ZenSetNextColor)(int);//设置下一步的颜色
 typedef void(*ZenSetNumberOfSimulations)(int);//与日志中的Playout对应，大概1000需要跑1s。
 typedef void(*ZenSetNumberOfThreads)(int);
 typedef void(*ZenSetPriorWeightFactor)(float);
-typedef void(*ZenStartThinking)(int);
-typedef void(*ZenStopThinking)(void);
+typedef void(*ZenStartThinking)(int);//开始思考
+typedef void(*ZenStopThinking)(void);//停止思考
 typedef void(*ZenTimeLeft)(int, int, int);
 typedef void(*ZenTimeSettings)(int, int, int);
-typedef bool(*ZenUndo)(int);
+typedef bool(*ZenUndo)(int);//悔棋
 #pragma endregion
 
 #pragma region 函数指针申明
