@@ -22,7 +22,7 @@ namespace ZenTestClient
             OnExit?.Invoke();
         }
 
-        public event Action<int[]> ArrayChanged;
+        public event Action<object> ArrayChanged;
 
         public MainWindowViewModel()
         {
@@ -42,7 +42,9 @@ namespace ZenTestClient
             VsGnugoCommand = new CommandBase() { ExecuteAction = ExcuteVsGnugo };
             DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
             //DllImport.AddStone(3, 3, 1);
-
+            DllImport.StartThinking(2);
+            Thread.Sleep(500);
+            DllImport.StopThinking();
             BtnExecuteEnabled = true;
         }
 
@@ -306,7 +308,7 @@ namespace ZenTestClient
             new Thread(() =>
             {
                 object[] paramArray = Parameters.Select(p => p.Value).ToArray();
-                int[] output = null;
+                object output = null;
 
                 for (int i = 0; i < Parameters.Count; i++)
                 {
@@ -318,6 +320,7 @@ namespace ZenTestClient
                     else if (Parameters[i].ParamInfo.ParameterType == typeof(byte[]))
                     {
                         paramArray[i] = new byte[19 * 19];
+                        output = (byte[])paramArray[i];
                     }
                 }
                 object result = Method.Invoke(null, paramArray);//Result用于输出

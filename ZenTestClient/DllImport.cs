@@ -102,9 +102,19 @@ namespace ZenTestClient
 
         [DllImport(DLLNAME, EntryPoint = "?ZenUndo@@YA_NH@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool Undo(int param0);
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order">zen分析的落点顺序</param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="count"></param>
+        /// <param name="winRate"></param>
+        /// <param name="param5"></param>
+        /// <param name="param6"></param>
         [DllImport(DLLNAME, EntryPoint = "?ZenGetTopMoveInfo@@YAXHAAH00AAMPADH@Z", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetTopMoveInfo(int param0, ref int x, ref int y, ref int count, ref float winRate, byte[] param5, int param6);
+        public static extern void GetTopMoveInfo(int order, ref int x, ref int y, ref int count, ref float winRate, byte[] param5, int param6);
 
         [DllImport(DLLNAME, EntryPoint = "?ZenReadGeneratedMove@@YAXAAH0AA_N1@Z", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ReadGeneratedMove(ref int x, ref int y, ref bool isPass, ref bool isResign);

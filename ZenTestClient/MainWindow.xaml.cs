@@ -69,21 +69,23 @@ namespace ZenTestClient
         //    }
         //}
 
-        private void ShowArray(int[] array)
+        private void ShowArray(object arrayObj)
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (array == null)
+                if (arrayObj == null)
                 {
                     return;
                 }
+                Array array = (Array)arrayObj;
+
                 int index = 0;
                 //TODO：更改立即数19
                 for (int i = 0; i < 19; i++)
                 {
                     for (int j = 0; j < 19; j++)
                     {
-                        textBlocks[i][j].Content = array[index].ToString();
+                        textBlocks[i][j].Content = array.GetValue(index).ToString();
                         index++;
                     }
                 }
