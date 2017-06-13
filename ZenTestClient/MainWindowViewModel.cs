@@ -36,10 +36,11 @@ namespace ZenTestClient
             Methods = list;
 
             ExecuteCommand = new CommandBase() { CanExecuteAction = CanExecute, ExecuteAction = Execute };
-            VsSelfCommand = new CommandBase() { ExecuteAction = ExcuteVsSelf };
-            IsSuicideCommand = new CommandBase() { ExecuteAction = ExcuteIsSuicide };
-            IsLegalCommand = new CommandBase() { ExecuteAction = ExcuteIsLegal };
-            VsGnugoCommand = new CommandBase() { ExecuteAction = ExcuteVsGnugo };
+            VsSelfCommand = new CommandBase() { ExecuteAction = ExecuteVsSelf };
+            IsSuicideCommand = new CommandBase() { ExecuteAction = ExecuteIsSuicide };
+            IsLegalCommand = new CommandBase() { ExecuteAction = ExecuteIsLegal };
+            VsGnugoCommand = new CommandBase() { ExecuteAction = ExecuteVsGnugo };
+            GetPointerCommand = new CommandBase() { ExecuteAction = ExecuteGetPointer };
             DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
             //DllImport.AddStone(3, 3, 1);
             DllImport.StartThinking(2);
@@ -48,7 +49,18 @@ namespace ZenTestClient
             BtnExecuteEnabled = true;
         }
 
-        private void ExcuteVsGnugo(object obj)
+        private void ExecuteGetPointer(object obj)
+        {
+            Type type = typeof(DllImport);
+            MethodInfo[] infos = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
+            List<MethodInfo> list = infos.ToList();
+            foreach (MethodInfo info in list)
+            {
+                Console.WriteLine(info.Name + "\t" + info.MethodHandle.GetFunctionPointer().ToString("X"));
+            }
+        }
+
+        private void ExecuteVsGnugo(object obj)
         {
             VsGnugo vsgnugo = new VsGnugo();
             OnExit += vsgnugo.Exit;
@@ -203,11 +215,11 @@ namespace ZenTestClient
             new Thread(() =>
             {
                 Thread.Sleep(5000);
-                ExcuteVsGnugo(null);
+                ExecuteVsGnugo(null);
             }).Start();
         }
 
-        private void ExcuteIsLegal(object obj)
+        private void ExecuteIsLegal(object obj)
         {
             ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + ".log";
 
@@ -227,7 +239,7 @@ namespace ZenTestClient
             WriteMsgLine("ExcuteIsLegal Over");
         }
 
-        private void ExcuteIsSuicide(object obj)
+        private void ExecuteIsSuicide(object obj)
         {
             ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + ".log";
 
@@ -249,7 +261,7 @@ namespace ZenTestClient
 
         int moveCount;
 
-        private void ExcuteVsSelf(object obj)
+        private void ExecuteVsSelf(object obj)
         {
             ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";
             DllImport.ClearBoard();
@@ -452,6 +464,9 @@ namespace ZenTestClient
         public CommandBase IsSuicideCommand { get; set; }
         public CommandBase IsLegalCommand { get; set; }
         public CommandBase VsGnugoCommand { get; set; }
+        public CommandBase GetPointerCommand { get; set; }
+
+
 
         private void WriteMsgLine(string msg)
         {

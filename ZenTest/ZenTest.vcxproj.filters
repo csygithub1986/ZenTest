@@ -40,6 +40,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Zen.dll" />
+    <None Include="ZenOriginal.dll" />
   </ItemGroup>
 </Project>

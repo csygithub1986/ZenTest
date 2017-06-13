@@ -4,51 +4,82 @@
 #include "stdafx.h"
 #include<Windows.h>
 #include"ZenTest.h"
+#include<iomanip>
+#include<fstream>
+#include<sstream>
+#include<string>
+
+using namespace std;
+
+char *logFile = "D:\abc.txt";
+
+void WriteFile(const char*);
+
+string num2str(int i)
+{
+	stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
+string num2str(float i)
+{
+	stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
+string num2str(byte i)
+{
+	stringstream ss;
+	ss << i;
+	return ss.str();
+}
+
 
 void LoadDll()
 {
-	HINSTANCE dllInstance = LoadLibrary("Zen.dll");
+	HINSTANCE dllInstance = LoadLibrary("Zen1.dll");
 	if (dllInstance == NULL)
 	{
 		FreeLibrary(dllInstance);
 		//return "没找到Zen.dll";
 	}
-	pZenAddStone = (ZenAddStone)GetProcAddress(dllInstance, DllZenAddStone);
-	pZenClearBoard = (ZenClearBoard)GetProcAddress(dllInstance, DllZenClearBoard);
-	pZenFixedHandicap = (ZenFixedHandicap)GetProcAddress(dllInstance, DllZenFixedHandicap);
-	pZenGetBestMoveRate = (ZenGetBestMoveRate)GetProcAddress(dllInstance, DllZenGetBestMoveRate);
-	pZenGetBoardColor = (ZenGetBoardColor)GetProcAddress(dllInstance, DllZenGetBoardColor);
-	pZenGetHistorySize = (ZenGetHistorySize)GetProcAddress(dllInstance, DllZenGetHistorySize);
-	pZenGetNextColor = (ZenGetNextColor)GetProcAddress(dllInstance, DllZenGetNextColor);
-	pZenGetNumBlackPrisoners = (ZenGetNumBlackPrisoners)GetProcAddress(dllInstance, DllZenGetNumBlackPrisoners);
-	pZenGetNumWhitePrisoners = (ZenGetNumWhitePrisoners)GetProcAddress(dllInstance, DllZenGetNumWhitePrisoners);
-	pZenGetPriorKnowledge = (ZenGetPriorKnowledge)GetProcAddress(dllInstance, DllZenGetPriorKnowledge);
-	pZenGetTerritoryStatictics = (ZenGetTerritoryStatictics)GetProcAddress(dllInstance, DllZenGetTerritoryStatictics);
-	pZenGetTopMoveInfo = (ZenGetTopMoveInfo)GetProcAddress(dllInstance, DllZenGetTopMoveInfo);
-	pZenInitialize = (ZenInitialize)GetProcAddress(dllInstance, DllZenInitialize);
-	pZenIsInitialized = (ZenIsInitialized)GetProcAddress(dllInstance, DllZenIsInitialized);
-	pZenIsLegal = (ZenIsLegal)GetProcAddress(dllInstance, DllZenIsLegal);
-	pZenIsSuicide = (ZenIsSuicide)GetProcAddress(dllInstance, DllZenIsSuicide);
-	pZenIsThinking = (ZenIsThinking)GetProcAddress(dllInstance, DllZenIsThinking);
-	pZenMakeShapeName = (ZenMakeShapeName)GetProcAddress(dllInstance, DllZenMakeShapeName);
-	pZenPass = (ZenPass)GetProcAddress(dllInstance, DllZenPass);
-	pZenPlay = (ZenPlay)GetProcAddress(dllInstance, DllZenPlay);
-	pZenReadGeneratedMove = (ZenReadGeneratedMove)GetProcAddress(dllInstance, DllZenReadGeneratedMove);
-	pZenSetAmafWeightFactor = (ZenSetAmafWeightFactor)GetProcAddress(dllInstance, DllZenSetAmafWeightFactor);
-	pZenSetBoardSize = (ZenSetBoardSize)GetProcAddress(dllInstance, DllZenSetBoardSize);
-	pZenSetDCNN = (ZenSetDCNN)GetProcAddress(dllInstance, DllZenSetDCNN);
-	pZenSetKomi = (ZenSetKomi)GetProcAddress(dllInstance, DllZenSetKomi);
-	pZenSetMaxTime = (ZenSetMaxTime)GetProcAddress(dllInstance, DllZenSetMaxTime);
-	pZenSetNextColor = (ZenSetNextColor)GetProcAddress(dllInstance, DllZenSetNextColor);
-	pZenSetNumberOfSimulations = (ZenSetNumberOfSimulations)GetProcAddress(dllInstance, DllZenSetNumberOfSimulations);
-	pZenSetNumberOfThreads = (ZenSetNumberOfThreads)GetProcAddress(dllInstance, DllZenSetNumberOfThreads);
-	pZenSetPriorWeightFactor = (ZenSetPriorWeightFactor)GetProcAddress(dllInstance, DllZenSetPriorWeightFactor);
-	pZenStartThinking = (ZenStartThinking)GetProcAddress(dllInstance, DllZenStartThinking);
-	pZenStopThinking = (ZenStopThinking)GetProcAddress(dllInstance, DllZenStopThinking);
-	pZenTimeLeft = (ZenTimeLeft)GetProcAddress(dllInstance, DllZenTimeLeft);
-	pZenTimeSettings = (ZenTimeSettings)GetProcAddress(dllInstance, DllZenTimeSettings);
-	pZenUndo = (ZenUndo)GetProcAddress(dllInstance, DllZenUndo);
-
+	pZenAddStone = (ZenAddStonePtr)GetProcAddress(dllInstance, DllZenAddStone);
+	pZenClearBoard = (ZenClearBoardPtr)GetProcAddress(dllInstance, DllZenClearBoard);
+	pZenFixedHandicap = (ZenFixedHandicapPtr)GetProcAddress(dllInstance, DllZenFixedHandicap);
+	pZenGetBestMoveRate = (ZenGetBestMoveRatePtr)GetProcAddress(dllInstance, DllZenGetBestMoveRate);
+	pZenGetBoardColor = (ZenGetBoardColorPtr)GetProcAddress(dllInstance, DllZenGetBoardColor);
+	pZenGetHistorySize = (ZenGetHistorySizePtr)GetProcAddress(dllInstance, DllZenGetHistorySize);
+	pZenGetNextColor = (ZenGetNextColorPtr)GetProcAddress(dllInstance, DllZenGetNextColor);
+	pZenGetNumBlackPrisoners = (ZenGetNumBlackPrisonersPtr)GetProcAddress(dllInstance, DllZenGetNumBlackPrisoners);
+	pZenGetNumWhitePrisoners = (ZenGetNumWhitePrisonersPtr)GetProcAddress(dllInstance, DllZenGetNumWhitePrisoners);
+	pZenGetPriorKnowledge = (ZenGetPriorKnowledgePtr)GetProcAddress(dllInstance, DllZenGetPriorKnowledge);
+	pZenGetTerritoryStatictics = (ZenGetTerritoryStaticticsPtr)GetProcAddress(dllInstance, DllZenGetTerritoryStatictics);
+	pZenGetTopMoveInfo = (ZenGetTopMoveInfoPtr)GetProcAddress(dllInstance, DllZenGetTopMoveInfo);
+	pZenInitialize = (ZenInitializePtr)GetProcAddress(dllInstance, DllZenInitialize);
+	pZenIsInitialized = (ZenIsInitializedPtr)GetProcAddress(dllInstance, DllZenIsInitialized);
+	pZenIsLegal = (ZenIsLegalPtr)GetProcAddress(dllInstance, DllZenIsLegal);
+	pZenIsSuicide = (ZenIsSuicidePtr)GetProcAddress(dllInstance, DllZenIsSuicide);
+	pZenIsThinking = (ZenIsThinkingPtr)GetProcAddress(dllInstance, DllZenIsThinking);
+	pZenMakeShapeName = (ZenMakeShapeNamePtr)GetProcAddress(dllInstance, DllZenMakeShapeName);
+	pZenPass = (ZenPassPtr)GetProcAddress(dllInstance, DllZenPass);
+	pZenPlay = (ZenPlayPtr)GetProcAddress(dllInstance, DllZenPlay);
+	pZenReadGeneratedMove = (ZenReadGeneratedMovePtr)GetProcAddress(dllInstance, DllZenReadGeneratedMove);
+	pZenSetAmafWeightFactor = (ZenSetAmafWeightFactorPtr)GetProcAddress(dllInstance, DllZenSetAmafWeightFactor);
+	pZenSetBoardSize = (ZenSetBoardSizePtr)GetProcAddress(dllInstance, DllZenSetBoardSize);
+	pZenSetDCNN = (ZenSetDCNNPtr)GetProcAddress(dllInstance, DllZenSetDCNN);
+	pZenSetKomi = (ZenSetKomiPtr)GetProcAddress(dllInstance, DllZenSetKomi);
+	pZenSetMaxTime = (ZenSetMaxTimePtr)GetProcAddress(dllInstance, DllZenSetMaxTime);
+	pZenSetNextColor = (ZenSetNextColorPtr)GetProcAddress(dllInstance, DllZenSetNextColor);
+	pZenSetNumberOfSimulations = (ZenSetNumberOfSimulationsPtr)GetProcAddress(dllInstance, DllZenSetNumberOfSimulations);
+	pZenSetNumberOfThreads = (ZenSetNumberOfThreadsPtr)GetProcAddress(dllInstance, DllZenSetNumberOfThreads);
+	pZenSetPriorWeightFactor = (ZenSetPriorWeightFactorPtr)GetProcAddress(dllInstance, DllZenSetPriorWeightFactor);
+	pZenStartThinking = (ZenStartThinkingPtr)GetProcAddress(dllInstance, DllZenStartThinking);
+	pZenStopThinking = (ZenStopThinkingPtr)GetProcAddress(dllInstance, DllZenStopThinking);
+	pZenTimeLeft = (ZenTimeLeftPtr)GetProcAddress(dllInstance, DllZenTimeLeft);
+	pZenTimeSettings = (ZenTimeSettingsPtr)GetProcAddress(dllInstance, DllZenTimeSettings);
+	pZenUndo = (ZenUndoPtr)GetProcAddress(dllInstance, DllZenUndo);
 }
 
 int main()
@@ -104,179 +135,293 @@ int main()
 
 #pragma region 函数定义
 
-bool AddStone(int a, int b, int c)
+bool ZenAddStone(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenAddStone " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return  (*pZenAddStone)(a, b, c);
 }
 
-void ClearBoard(void)
+void ZenClearBoard(void)
 {
+	ostringstream s1;
+	s1 << "ZenClearBoard ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenClearBoard)();
 }
 
-
-void FixedHandicap(int a)
+void ZenFixedHandicap(int a)
 {
+	ostringstream s1;
+	s1 << "ZenFixedHandicap " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenFixedHandicap)(a);
 }
 
-int GetBestMoveRate(void)
+int ZenGetBestMoveRate(void)
 {
+	ostringstream s1;
+	s1 << "ZenGetBestMoveRate ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetBestMoveRate)();
 }
 
-int GetBoardColor(int a, int b)
+int ZenGetBoardColor(int a, int b)
 {
+	ostringstream s1;
+	s1 << "ZenGetBoardColor " << a << " " << b;
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetBoardColor)(a, b);
 }
 
-int GetHistorySize(void)
+int ZenGetHistorySize(void)
 {
+	ostringstream s1;
+	s1 << "ZenGetHistorySize ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetHistorySize)();
 }
 
-int GetNextColor(void)
+int ZenGetNextColor(void)
 {
+	ostringstream s1;
+	s1 << "ZenGetNextColor ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetNextColor)();
 }
 
-int GetNumBlackPrisoners(void)
+int ZenGetNumBlackPrisoners(void)
 {
+	ostringstream s1;
+	s1 << "ZenGetNumBlackPrisoners ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetNumBlackPrisoners)();
 }
 
-int GetNumWhitePrisoners(void)
+int ZenGetNumWhitePrisoners(void)
 {
+	ostringstream s1;
+	s1 << "ZenGetNumWhitePrisoners ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetNumWhitePrisoners)();
 }
 
-void GetPriorKnowledge(int(*const a)[19])
+void ZenGetPriorKnowledge(int(*const a)[19])
 {
+	ostringstream s1;
+	s1 << "ZenGetPriorKnowledge " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetPriorKnowledge)(a);
 }
 
-void GetTerritoryStatictics(int(*const a)[19])
+void ZenGetTerritoryStatictics(int(*const a)[19])
 {
+	ostringstream s1;
+	s1 << "ZenGetTerritoryStatictics " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetTerritoryStatictics)(a);
 }
 
-void GetTopMoveInfo(int a, int  &b, int &c, int &d, float &e, char *f, int g)
+void ZenGetTopMoveInfo(int a, int  &b, int &c, int &d, float &e, char *f, int g)
 {
+	ostringstream s1;
+	s1 << "ZenGetTopMoveInfo " << a << " " << b << " " << c << " " << d << " " << e << " " << f << " " << g;
+	WriteFile(s1.str().c_str());
 	return	(*pZenGetTopMoveInfo)(a, b, c, d, e, f, g);
 }
 
-void Initialize()
+void ZenInitialize(char const * a)
 {
-	return	(*pZenInitialize)("a");
+	ostringstream s1;
+	s1 << "ZenInitialize " << a;
+	WriteFile(s1.str().c_str());
+	return	(*pZenInitialize)(a);
 }
 
-bool IsInitialized(void)
+bool ZenIsInitialized(void)
 {
+	ostringstream s1;
+	s1 << "ZenIsInitialized ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenIsInitialized)();
 }
 
-bool IsLegal(int a, int b, int c)
+bool ZenIsLegal(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenIsLegal " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return	(*pZenIsLegal)(a, b, c);
 }
 
-bool IsSuicide(int a, int b, int c)
+bool ZenIsSuicide(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenIsSuicide " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return	(*pZenIsSuicide)(a, b, c);
 }
 
-bool IsThinking(void)
+bool ZenIsThinking(void)
 {
+	ostringstream s1;
+	s1 << "ZenIsThinking ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenIsThinking)();
 }
 
-void MakeShapeName(int a, int b, int c, char *d, int e)
+void ZenMakeShapeName(int a, int b, int c, char *d, int e)
 {
+	ostringstream s1;
+	s1 << "ZenMakeShapeName " << a << " " << b << " " << c << " " << d << " " << e;
+	WriteFile(s1.str().c_str());
 	return	(*pZenMakeShapeName)(a, b, c, d, e);
 }
 
-void Pass(int a)
+void ZenPass(int a)
 {
+	ostringstream s1;
+	s1 << "ZenPass " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenPass)(a);
 }
 
-bool Play(int a, int b, int c)
+bool ZenPlay(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenPlay " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return	(*pZenPlay)(a, b, c);
 }
 
-void ReadGeneratedMove(int &a, int &b, bool &c, bool &d)
+void ZenReadGeneratedMove(int &a, int &b, bool &c, bool &d)
 {
+	ostringstream s1;
+	s1 << "ZenReadGeneratedMove " << a << " " << b << " " << c << " " << d;
+	WriteFile(s1.str().c_str());
 	return	(*pZenReadGeneratedMove)(a, b, c, d);
 }
 
-void SetAmafWeightFactor(float a)
+void ZenSetAmafWeightFactor(float a)
 {
+	ostringstream s1;
+	s1 << "ZenSetAmafWeightFactor " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetAmafWeightFactor)(a);
 }
 
-void SetBoardSize(int a)
+void ZenSetBoardSize(int a)
 {
+	ostringstream s1;
+	s1 << "ZenSetBoardSize " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetBoardSize)(a);
 }
 
-void SetDCNN(bool a)
+void ZenSetDCNN(bool a)
 {
+	ostringstream s1;
+	s1 << "ZenSetDCNN " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetDCNN)(a);
 }
 
-void SetKomi(float a)
+void ZenSetKomi(float a)
 {
+	ostringstream s1;
+	s1 << "ZenSetKomi " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetKomi)(a);
 }
 
-void SetMaxTime(float a)
+void ZenSetMaxTime(float a)
 {
+	ostringstream s1;
+	s1 << "ZenSetMaxTime ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetMaxTime)(a);
 }
 
-void SetNextColor(int a)
+void ZenSetNextColor(int a)
 {
+	ostringstream s1;
+	s1 << "ZenSetNextColor " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetNextColor)(a);
 }
 
-void SetNumberOfSimulations(int a)
+void ZenSetNumberOfSimulations(int a)
 {
+	ostringstream s1;
+	s1 << "ZenSetNumberOfSimulations " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetNumberOfSimulations)(a);
 }
 
-void SetNumberOfThreads(int a)
+void ZenSetNumberOfThreads(int a)
 {
+	ostringstream s1;
+	s1 << "ZenSetNumberOfThreads " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetNumberOfThreads)(a);
 }
 
-void SetPriorWeightFactor(float a)
+void ZenSetPriorWeightFactor(float a)
 {
+	ostringstream s1;
+	s1 << "ZenSetPriorWeightFactor " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenSetPriorWeightFactor)(a);
 }
 
-void StartThinking(int a)
+void ZenStartThinking(int a)
 {
+	ostringstream s1;
+	s1 << "ZenStartThinking " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenStartThinking)(a);
 }
 
-void StopThinking(void)
+void ZenStopThinking(void)
 {
+	ostringstream s1;
+	s1 << "ZenStopThinking ";
+	WriteFile(s1.str().c_str());
 	return	(*pZenStopThinking)();
 }
 
-void TimeLeft(int a, int b, int c)
+void ZenTimeLeft(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenTimeLeft " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return	(*pZenTimeLeft)(a, b, c);
 }
 
-void TimeSettings(int a, int b, int c)
+void ZenTimeSettings(int a, int b, int c)
 {
+	ostringstream s1;
+	s1 << "ZenTimeSettings " << a << " " << b << " " << c;
+	WriteFile(s1.str().c_str());
 	return	(*pZenTimeSettings)(a, b, c);
 }
 
-bool Undo(int a)
+bool ZenUndo(int a)
 {
+	ostringstream s1;
+	s1 << "ZenUndo " << a;
+	WriteFile(s1.str().c_str());
 	return	(*pZenUndo)(a);
 }
 #pragma endregion
+
+void WriteFile(const char *msg)
+{
+	ofstream f1("d:\\zenTest.txt", ios::app);//打开文件用于写，若文件不存在就创建它
+	if (!f1)
+		return;//打开文件失败则结束运行
+	f1 << msg << endl;//使用插入运算符写文件内容
+	f1.close();//关闭文件
+}
+

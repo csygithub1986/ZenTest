@@ -35,6 +35,9 @@
                     <MenuItem Header="对外测试">
                         <MenuItem Header="VsGnugo" Command="{Binding VsGnugoCommand}"/>
                     </MenuItem>
+                    <MenuItem Header="内核">
+                        <MenuItem Header="方法地址" Command="{Binding GetPointerCommand}"/>
+                    </MenuItem>
                 </Menu>
             </ToolBar>
         </ToolBarPanel>
@@ -60,7 +63,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Visibility="Visible" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
+            <GroupBox Visibility="Collapsed" Grid.Column="2" Grid.RowSpan="2" Header="矩阵结果" Width="{Binding ActualHeight,ElementName=window}">
                 <UniformGrid Name="arrayGrid" Rows="19" Columns="19"/>
             </GroupBox>
 
