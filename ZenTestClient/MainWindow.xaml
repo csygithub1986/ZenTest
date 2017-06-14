@@ -17,7 +17,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                 <!--stackPanel长度怎么弄-->
                 <Label Background="Green" Width="80" Content="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamName}"/>
-                <TextBox Text="{Binding Value}" Width="80" HorizontalAlignment="Stretch" 
+                <TextBox Text="{Binding Value,Converter={StaticResource convertor}}" Width="80" HorizontalAlignment="Stretch" 
                          IsReadOnly="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamReadOnly}"
                          IsEnabled="{Binding ParamInfo,Converter={StaticResource convertor},ConverterParameter=ParamEnable}"/>
             </StackPanel>

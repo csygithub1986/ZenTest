@@ -106,12 +106,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZenTest\ZenTest.vcxproj">
-      <Project>{2663af4b-dda3-4d7d-a0f9-eb6c638d3ceb}</Project>
-      <Name>ZenTest</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Zen.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

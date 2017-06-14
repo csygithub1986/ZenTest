@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZenTest", "ZenTest\ZenTest.vcxproj", "{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}"
 EndProject
@@ -18,6 +18,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}.Debug|Any CPU.Build.0 = Debug|Win32
 		{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}.Debug|x64.ActiveCfg = Debug|x64
 		{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}.Debug|x64.Build.0 = Debug|x64
 		{2663AF4B-DDA3-4D7D-A0F9-EB6C638D3CEB}.Debug|x86.ActiveCfg = Debug|Win32

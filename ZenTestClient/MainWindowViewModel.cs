@@ -41,11 +41,10 @@ namespace ZenTestClient
             IsLegalCommand = new CommandBase() { ExecuteAction = ExecuteIsLegal };
             VsGnugoCommand = new CommandBase() { ExecuteAction = ExecuteVsGnugo };
             GetPointerCommand = new CommandBase() { ExecuteAction = ExecuteGetPointer };
-            DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
-            //DllImport.AddStone(3, 3, 1);
-            DllImport.StartThinking(2);
-            Thread.Sleep(500);
-            DllImport.StopThinking();
+            //DllImport.Initialize(DateTime.Now.ToString("MM-dd HH-mm-ss") + ".zen");//不调用initial，调用其他方法都要出错
+            //DllImport.StartThinking(2);
+            //Thread.Sleep(500);
+            //DllImport.StopThinking();
             BtnExecuteEnabled = true;
         }
 

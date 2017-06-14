@@ -11,8 +11,6 @@
 
 using namespace std;
 
-char *logFile = "D:\abc.txt";
-
 void WriteFile(const char*);
 
 string num2str(int i)
@@ -39,9 +37,11 @@ string num2str(byte i)
 
 void LoadDll()
 {
-	HINSTANCE dllInstance = LoadLibrary("Zen1.dll");
+	WriteFile("Load");
+	HINSTANCE dllInstance = LoadLibrary("dll\\Zen.dll");
 	if (dllInstance == NULL)
 	{
+		WriteFile("dll not found");
 		FreeLibrary(dllInstance);
 		//return "√ª’“µΩZen.dll";
 	}
@@ -80,6 +80,7 @@ void LoadDll()
 	pZenTimeLeft = (ZenTimeLeftPtr)GetProcAddress(dllInstance, DllZenTimeLeft);
 	pZenTimeSettings = (ZenTimeSettingsPtr)GetProcAddress(dllInstance, DllZenTimeSettings);
 	pZenUndo = (ZenUndoPtr)GetProcAddress(dllInstance, DllZenUndo);
+	WriteFile("dll load completed");
 }
 
 int main()
