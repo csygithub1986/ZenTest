@@ -15,7 +15,8 @@ namespace ZenTestClient
         public event PropertyChangedEventHandler PropertyChanged;
         public event Action OnExit;
 
-        int testCount = 3;
+        int totalCount = 3;
+        int testCount = 1;
 
         public void Exit()
         {
@@ -66,12 +67,13 @@ namespace ZenTestClient
             vsgnugo.OnMsgOutput += Vsgnugo_OnMsgOutput;
             vsgnugo.Start();
 
-            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "让九子" + testCount + "~ZenVsGnugo.sgf";
+            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "让八子" + testCount + "~ZenVsGnugo.sgf";
             DllImport.ClearBoard();
             DllImport.FixedHandicap(9);
             DllImport.SetNumberOfSimulations(5000);
             moveCount = 0;
-            ClientLog.WriteLog("(;AB[pd][dd][pp][jj][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");
+            ClientLog.WriteLog("(;AB[pd][dd][pp][jj][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");//9
+            ClientLog.WriteLog("(;AB[pd][dd][pp][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");//8
             //new Thread(() =>
             // {
             //     Thread.Sleep(2000);
@@ -203,8 +205,8 @@ namespace ZenTestClient
         private void ZenVsGnugoOver()
         {
             //让子加1
-            testCount--;
-            if (testCount <= 0)
+            testCount++;
+            if (testCount > totalCount)
             {
                 MessageBox.Show("done");
                 return;

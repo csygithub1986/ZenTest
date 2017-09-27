@@ -160,6 +160,6 @@ _EXTERN_C_ 	 bool ZenUndo(int);
 
 /*
 2是黑，1是白，0是空
-Addstone，除了1和2，以外，都认为是1
+Addstone，非2的值，都认为是1
 
 */

@@ -1,0 +1,24 @@
+﻿<Window x:Class="ZenTestClient.SelfVsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZenTestClient"
+        mc:Ignorable="d"
+        Title="自测" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <ToolBarPanel DockPanel.Dock="Top">
+            <ToolBar >
+                <Menu>
+                    <MenuItem Header="自我测试">
+                        <MenuItem Header="VsSelf" Click="Menu_VsSelfClick"/>
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+        </ToolBarPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <TextBlock TextWrapping="Wrap" Text="{Binding OutputMsg}"/>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
