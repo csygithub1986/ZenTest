@@ -14,14 +14,22 @@ using System.Windows.Shapes;
 
 namespace ZenTestClient
 {
-    /// <summary>
-    /// SelfVsConfigWin.xaml 的交互逻辑
-    /// </summary>
-    public partial class SelfVsConfigWin : Window
+    public partial class PartnerModeWindow : Window
     {
-        public SelfVsConfigWin()
+        public PartnerModeWindow()
         {
             InitializeComponent();
+        }
+
+        private void Menu_VsSelfClick(object sender, RoutedEventArgs e)
+        {
+            PartnerModeConfigDialog w = new PartnerModeConfigDialog();
+            w.Owner = this;
+            w.ShowDialog();
+            if (w.DialogResult == true)
+            {
+
+            }
         }
     }
 }

@@ -57,19 +57,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ClientLog.cs" />
-    <Compile Include="CommandBase.cs" />
-    <Compile Include="Convertor.cs" />
-    <Compile Include="ParameterBullet.cs" />
-    <Compile Include="SelfVS\SelfVS.cs" />
-    <Compile Include="SelfVS\SelfVsWindow.xaml.cs">
-      <DependentUpon>SelfVsWindow.xaml</DependentUpon>
+    <Compile Include="Common\ClientLog.cs" />
+    <Compile Include="Common\CommandBase.cs" />
+    <Compile Include="PartnerMode\AISetting.cs" />
+    <Compile Include="PartnerMode\PartnerModeVM.cs" />
+    <Compile Include="Research\Convertor.cs" />
+    <Compile Include="Research\ParameterBullet.cs" />
+    <Compile Include="PartnerMode\PartnerModeCalculator.cs" />
+    <Compile Include="PartnerMode\PartnerModeWindow.xaml.cs">
+      <DependentUpon>PartnerModeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SelfVS\SelfVsConfigWin.xaml.cs">
-      <DependentUpon>SelfVsConfigWin.xaml</DependentUpon>
+    <Compile Include="PartnerMode\PartnerModeConfigDialog.xaml.cs">
+      <DependentUpon>PartnerModeConfigDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VsGnugo.cs" />
-    <Compile Include="ZenMethod.cs" />
+    <Compile Include="GnuGo\VsGnugo.cs" />
+    <Compile Include="Research\ZenMethod.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,16 +80,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DllImport.cs" />
+    <Compile Include="Common\DllImport.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SelfVS\SelfVsWindow.xaml">
+    <Page Include="PartnerMode\PartnerModeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SelfVS\SelfVsConfigWin.xaml">
+    <Page Include="PartnerMode\PartnerModeConfigDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -130,6 +132,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

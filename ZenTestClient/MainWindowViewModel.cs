@@ -73,7 +73,7 @@ namespace ZenTestClient
             DllImport.SetNumberOfSimulations(5000);
             moveCount = 0;
             ClientLog.WriteLog("(;AB[pd][dd][pp][jj][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");//9
-            ClientLog.WriteLog("(;AB[pd][dd][pp][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");//8
+            //ClientLog.WriteLog("(;AB[pd][dd][pp][dj][pj][jp][jd][dp]BP[gnugo]WP[Zen]");//8
             //new Thread(() =>
             // {
             //     Thread.Sleep(2000);
@@ -316,7 +316,7 @@ namespace ZenTestClient
 
         private void Execute(object obj)
         {
-            BtnExecuteEnabled = false;
+            //BtnExecuteEnabled = false;
 
             new Thread(() =>
             {
@@ -343,6 +343,7 @@ namespace ZenTestClient
                     Result = result;
                     ArrayChanged?.Invoke(output);
                     BtnExecuteEnabled = true;
+                    Console.WriteLine(Method.Name + "返回结果" + result?.ToString());
                     for (int j = 0; j < paramArray.Length; j++)
                     {
                         Parameters[j].Value = paramArray[j];
