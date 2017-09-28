@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:ZenTestClient"
         mc:Ignorable="d"
         Title="自测" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:PartnerModeVM/>
+    </Window.DataContext>
     <DockPanel>
         <ToolBarPanel DockPanel.Dock="Top">
             <ToolBar >

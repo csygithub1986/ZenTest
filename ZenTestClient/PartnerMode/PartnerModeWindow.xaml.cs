@@ -24,6 +24,7 @@ namespace ZenTestClient
         private void Menu_VsSelfClick(object sender, RoutedEventArgs e)
         {
             PartnerModeConfigDialog w = new PartnerModeConfigDialog();
+            w.DataContext = this.DataContext;
             w.Owner = this;
             w.ShowDialog();
             if (w.DialogResult == true)

@@ -59,7 +59,7 @@
     </ApplicationDefinition>
     <Compile Include="Common\ClientLog.cs" />
     <Compile Include="Common\CommandBase.cs" />
-    <Compile Include="PartnerMode\AISetting.cs" />
+    <Compile Include="PartnerMode\PlayerSetting.cs" />
     <Compile Include="PartnerMode\PartnerModeVM.cs" />
     <Compile Include="Research\Convertor.cs" />
     <Compile Include="Research\ParameterBullet.cs" />

@@ -27,7 +27,7 @@ namespace ZenTestClient
 
         public PartnerModeConfigDialog()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         private void Rb_Checked(object sender, RoutedEventArgs e)
