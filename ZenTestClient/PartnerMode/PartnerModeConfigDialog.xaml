@@ -48,7 +48,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <ItemsControl ItemsSource="{Binding GameSetting}">
+        <ItemsControl ItemsSource="{Binding PlayerSettings}">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <UniformGrid Rows="2" Columns="2" IsItemsHost="True"></UniformGrid>
@@ -60,7 +60,7 @@
         <GroupBox Header="比赛总次数" Grid.Row="1"  Margin="5" Name="gbSelfConfig" Background="#F0F0E0"> 
             <Grid>
                 <TextBlock Text="比赛总次数" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="47,6,0,6"/>
-                <TextBox VerticalContentAlignment="Center" Name="txtGameCount" Width="120" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="120,2,0,2" Text="{Binding GameLoopTime}"/>
+                <TextBox VerticalContentAlignment="Center" Name="txtGameCount" Width="120" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="120,2,0,2" Text="{Binding GameLoopTimes}"/>
             </Grid>
         </GroupBox>
 

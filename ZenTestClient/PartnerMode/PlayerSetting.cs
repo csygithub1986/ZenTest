@@ -106,5 +106,22 @@ namespace ZenTestClient
             }
         }
         private string _HeaderName;
+
+        /// <summary>
+        /// 玩家名称
+        /// </summary>
+        public string PlayerName
+        {
+            get { return _PlayerName; }
+            set
+            {
+                if (_PlayerName != value)
+                {
+                    _PlayerName = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PlayerName"));
+                }
+            }
+        }
+        private string _PlayerName;
     }
 }

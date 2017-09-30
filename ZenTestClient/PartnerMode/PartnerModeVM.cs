@@ -13,46 +13,46 @@ namespace ZenTestClient
 
         public PartnerModeVM()
         {
-            _GameSetting = new PlayerSetting[4];
+            _PlayerSettings = new PlayerSetting[4];
             string[] headerNames = { "黑1", "白1", "黑2", "白2" };
             int[] colors = { 2, 1, 2, 1 };
             for (int i = 0; i < 4; i++)
             {
-                _GameSetting[i] = new PlayerSetting() { HeaderName = headerNames[i], Color = colors[i] };
+                _PlayerSettings[i] = new PlayerSetting() { HeaderName = headerNames[i], Color = colors[i] };
             }
-            GameLoopTime = 1;
+            GameLoopTimes = 1;
         }
 
-        public PlayerSetting[] GameSetting
+        public PlayerSetting[] PlayerSettings
         {
-            get { return _GameSetting; }
+            get { return _PlayerSettings; }
             set
             {
-                if (_GameSetting != value)
+                if (_PlayerSettings != value)
                 {
-                    _GameSetting = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GameSetting"));
+                    _PlayerSettings = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("PlayerSettings"));
                 }
             }
         }
-        private PlayerSetting[] _GameSetting;
+        private PlayerSetting[] _PlayerSettings;
 
         /// <summary>
         /// 用于棋力自测或者和其他软件对测时，测试的盘数。与人下请设定为1
         /// </summary>
-        public int GameLoopTime
+        public int GameLoopTimes
         {
-            get { return _GameLoopTime; }
+            get { return _GameLoopTimes; }
             set
             {
-                if (_GameLoopTime != value)
+                if (_GameLoopTimes != value)
                 {
-                    _GameLoopTime = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GameLoopTime"));
+                    _GameLoopTimes = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GameLoopTimes"));
                 }
             }
         }
-        private int _GameLoopTime;
+        private int _GameLoopTimes;
 
     }
 }
