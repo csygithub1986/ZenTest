@@ -338,7 +338,7 @@ namespace ZenTestClient
                 }
                 object result = Method.Invoke(null, paramArray);//Result用于输出
 
-                App.Current.Dispatcher.BeginInvoke(new Action(() =>
+                App.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     Result = result;
                     ArrayChanged?.Invoke(output);

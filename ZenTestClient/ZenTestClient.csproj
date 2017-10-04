@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,6 +59,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Board\Board.xaml.cs">
+      <DependentUpon>Board.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Board\BoardState.cs" />
+    <Compile Include="Board\Enums.cs" />
     <Compile Include="Common\ClientLog.cs" />
     <Compile Include="Common\CommandBase.cs" />
     <Compile Include="PartnerMode\PlayerSetting.cs" />
@@ -72,6 +79,12 @@
     </Compile>
     <Compile Include="GnuGo\VsGnugo.cs" />
     <Compile Include="Research\ZenMethod.cs" />
+    <Compile Include="Rule\IRule.cs" />
+    <Compile Include="Rule\RuleDemo.cs" />
+    <Page Include="Board\Board.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -131,6 +144,15 @@
     <None Include="gnugo.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\board-default.bmp" />
+    <Resource Include="Images\green.png" />
+    <Resource Include="Images\lastmove.png" />
+    <Resource Include="Images\piece_b.png" />
+    <Resource Include="Images\piece_w.png" />
+    <Resource Include="Images\red.png" />
+    <Resource Include="Images\star.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

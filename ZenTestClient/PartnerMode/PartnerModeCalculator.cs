@@ -13,10 +13,12 @@ namespace ZenTestClient
         private int m_TotalGameLoopTimes;
         private int m_CurrentGameTimes;
         private PlayerSetting[] aiSettings;
+        private int m_BoardSize;
 
+        public Action StartCallback;
         public Action<int, int, int, bool, bool> UICallback;
-        public Action<int, int, int, bool, bool> LogCallback;
         public Action<int, int, int, bool, bool> GameOverCallback;
+        public Action<int[]> TerritoryCallback;
 
         public Action<int> HandTurnCallback;//移交顺序
 
@@ -25,22 +27,27 @@ namespace ZenTestClient
         /// </summary>
         private List<Tuple<int, int, bool, bool>> m_History;
 
-        public PartnerModeCalculator(PlayerSetting[] settings, int totalGameLoopTimes)
+        public PartnerModeCalculator(PlayerSetting[] settings, int totalGameLoopTimes, int boardSize)
         {
             aiSettings = settings;
+            m_BoardSize = boardSize;
             m_TotalGameLoopTimes = totalGameLoopTimes;
             m_CurrentGameTimes = 1;
         }
 
         public void InitGame()
         {
-            DllImport.Initialize("xxx-" + m_CurrentGameTimes + " " + DateTime.Now.ToString("yyMMddHHmmss") + ".txt");//TODO:文件名，在界面中加入playerName，然后命名
+            DllImport.Initialize("ZenInit-" + m_CurrentGameTimes + " " + DateTime.Now.ToString("yyMMddHHmmss") + ".txt");//TODO:文件名，在界面中加入playerName，然后命名
             m_History = new List<Tuple<int, int, bool, bool>>();
+
+            ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";//TODO，命名
+            ClientLog.WriteLog("(;PB[xyz]PW[abc]");
         }
 
         public void Start()
         {
             InitGame();
+            StartCallback?.Invoke();
             if (aiSettings[0].IsZen)
             {
                 GetZenMove(0);
@@ -50,7 +57,6 @@ namespace ZenTestClient
                 HandTurnCallback?.Invoke(0);
             }
         }
-
 
         /// <summary>
         /// Zen走棋（线程）
@@ -65,10 +71,17 @@ namespace ZenTestClient
                 DllImport.StartThinking(aiSettings[turn].Color);
                 Thread.Sleep(aiSettings[turn].TimePerMove * 1000);
                 DllImport.StopThinking();
+                //Thread.Sleep(500);
                 int x = 0, y = 0;
                 bool isPass = false, isResign = false;
                 DllImport.ReadGeneratedMove(ref x, ref y, ref isPass, ref isResign);
-                DealZenResult(stepNum, x, y, isPass, isResign);
+                int count = 0;
+                float winRate = 0;
+                DllImport.GetTopMoveInfo(0, ref x, ref y, ref count, ref winRate, null, 0);
+
+
+                Console.WriteLine(count + "winrate:" + winRate);
+                DealZenResult(stepNum, x, y, isPass, isResign, count, winRate);
             });
         }
 
@@ -83,13 +96,12 @@ namespace ZenTestClient
         public void OutsiderMoveArrived(int stepNum, int x, int y, bool isPass, bool isResign)
         {
             m_History.Add(new Tuple<int, int, bool, bool>(x, y, isPass, isResign));
-            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
-            LogCallback?.Invoke(stepNum, x, y, isPass, isResign);
 
             if (isPass)
             {
-                if (m_History.Count > 1 && m_History[m_History.Count - 2].Item4)//两手pass
+                if (m_History.Count > 1 && m_History[m_History.Count - 2].Item3)//两手pass
                 {
+                    ClientLog.WriteLog(")");
                     if (m_CurrentGameTimes == m_TotalGameLoopTimes)//全部比赛完成
                     {
                         GameOverCallback?.Invoke(stepNum, x, y, isPass, isResign);
@@ -105,6 +117,7 @@ namespace ZenTestClient
 
             if (isResign)
             {
+                ClientLog.WriteLog(")");
                 if (m_CurrentGameTimes == m_TotalGameLoopTimes)//全部比赛完成
                 {
                     GameOverCallback?.Invoke(stepNum, x, y, isPass, isResign);
@@ -116,6 +129,21 @@ namespace ZenTestClient
                 }
                 return;
             }
+
+
+            DllImport.Play(x, y, 2 - stepNum % 2);
+            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
+
+            if (TerritoryCallback != null)
+            {
+                int[] territoryStatictics = new int[m_BoardSize * m_BoardSize];
+                DllImport.GetTerritoryStatictics(territoryStatictics);
+                TerritoryCallback.Invoke(territoryStatictics);
+            }
+
+            ClientLog.WriteLog(";" + (stepNum % 2 == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
+            Console.WriteLine(stepNum + " : " + x + " " + y);
+
 
             stepNum++;
             int turn = stepNum % 4;
@@ -139,18 +167,14 @@ namespace ZenTestClient
         /// <param name="y"></param>
         /// <param name="isPass"></param>
         /// <param name="isResign"></param>
-        private void DealZenResult(int stepNum, int x, int y, bool isPass, bool isResign)
+        private void DealZenResult(int stepNum, int x, int y, bool isPass, bool isResign, int count, float winRate)
         {
-            DllImport.Play(stepNum % 2, x, y);
             m_History.Add(new Tuple<int, int, bool, bool>(x, y, isPass, isResign));
-
-            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
-            LogCallback?.Invoke(stepNum, x, y, isPass, isResign);
-
             if (isPass)
             {
-                if (m_History.Count > 1 && m_History[m_History.Count - 2].Item4)//两手pass
+                if (m_History.Count > 1 && m_History[m_History.Count - 2].Item3)//两手pass
                 {
+                    ClientLog.WriteLog(")");
                     if (m_CurrentGameTimes == m_TotalGameLoopTimes)//全部比赛完成
                     {
                         GameOverCallback?.Invoke(stepNum, x, y, isPass, isResign);
@@ -166,6 +190,7 @@ namespace ZenTestClient
 
             if (isResign)
             {
+                ClientLog.WriteLog(")");
                 if (m_CurrentGameTimes == m_TotalGameLoopTimes)//全部比赛完成
                 {
                     GameOverCallback?.Invoke(stepNum, x, y, isPass, isResign);
@@ -177,6 +202,20 @@ namespace ZenTestClient
                 }
                 return;
             }
+
+            DllImport.Play(x, y, 2 - stepNum % 2);
+
+            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
+            if (TerritoryCallback != null)
+            {
+                int[] territoryStatictics = new int[m_BoardSize * m_BoardSize];
+                DllImport.GetTerritoryStatictics(territoryStatictics);
+                TerritoryCallback.Invoke(territoryStatictics);
+            }
+
+            ClientLog.WriteLog(";" + (stepNum % 2 == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]" + "C[胜率：" + winRate.ToString("F2") + "% count=" + count + "]");
+            Console.WriteLine(stepNum + " : " + x + " " + y);
+
 
             stepNum++;
             int turn = stepNum % 4;

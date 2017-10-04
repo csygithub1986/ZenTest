@@ -17,8 +17,9 @@ namespace ZenTestClient
 
         public PlayerSetting()
         {
-            TimePerMove = 5;
+            TimePerMove = 2;
             Layout = 50000;
+            IsZen = true;
         }
 
         /// <summary>

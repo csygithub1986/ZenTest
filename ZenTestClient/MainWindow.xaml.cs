@@ -71,7 +71,7 @@ namespace ZenTestClient
 
         private void ShowArray(object arrayObj)
         {
-            Dispatcher.BeginInvoke(new Action(() =>
+            Dispatcher.Invoke(new Action(() =>
             {
                 if (arrayObj == null)
                 {

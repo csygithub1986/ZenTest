@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		
         xmlns:local="clr-namespace:ZenTestClient" Closed="Window_Closed"
         mc:Ignorable="d"
-        Title="自测" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+        Title="自测" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <local:PartnerModeVM/>
     </Window.DataContext>
@@ -20,8 +21,23 @@
             </ToolBar>
         </ToolBarPanel>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
             <TextBlock TextWrapping="Wrap" Text="{Binding OutputMsg}"/>
-        </ScrollViewer>
+        </ScrollViewer>-->
+
+        <Grid Name="grid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--<b:Board StoneSize="20"></b:Board>-->
+            <Viewbox>
+                <local:Board x:Name="m_Board" BoardSize="19" BoardMode="Playing"></local:Board>
+            </Viewbox>
+            <Viewbox Grid.Column="1">
+                <local:Board x:Name="m_BoardAnalyse" BoardSize="19" BoardMode="Analyse"></local:Board>
+            </Viewbox>
+        </Grid>
     </DockPanel>
 </Window>

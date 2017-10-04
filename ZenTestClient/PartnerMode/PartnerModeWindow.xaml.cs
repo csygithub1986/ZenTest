@@ -24,34 +24,54 @@ namespace ZenTestClient
 
         private void Menu_VsSelfClick(object sender, RoutedEventArgs e)
         {
+            m_Board.BoardMode = BoardMode.AutoPlaying;
             PartnerModeConfigDialog w = new PartnerModeConfigDialog();
             w.DataContext = this.DataContext;
             w.Owner = this;
             w.ShowDialog();
             if (w.DialogResult == true)
             {
-                PartnerModeCalculator cal = new PartnerModeCalculator((DataContext as PartnerModeVM).PlayerSettings, (DataContext as PartnerModeVM).GameLoopTimes);
-                cal.LogCallback = Log;
+                PartnerModeCalculator cal = new PartnerModeCalculator((DataContext as PartnerModeVM).PlayerSettings, (DataContext as PartnerModeVM).GameLoopTimes, 19);
                 cal.GameOverCallback = GameOver;
-
-                ClientLog.FilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + DateTime.Now.ToString("MM-dd HH-mm-ss") + "~ZenVsZen.sgf";//TODO，命名
-                ClientLog.WriteLog("(;WP[Zen]BP[Zen]");
-
-
+                cal.UICallback = Play;
+                cal.TerritoryCallback = ShowTerritory;
                 cal.Start();
+
             }
         }
 
-        private void Log(int stepNum, int x, int y, bool isPass, bool isResign)
+        private void ShowTerritory(int[] territory)
         {
-            ClientLog.WriteLog(";" + (stepNum % 2 == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
-            Console.WriteLine(stepNum + " : ");
+            Dispatcher.Invoke(new Action(() =>
+            {
+                m_BoardAnalyse.ShowAffects(territory);
+            }));
+        }
+
+        /// <summary>
+        /// stepNum, x, y, isPass, isResign
+        /// </summary>
+        /// <param name="stepNum"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="isPass"></param>
+        /// <param name="isResign"></param>
+        private void Play(int stepNum, int x, int y, bool isPass, bool isResign)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (stepNum == 0)
+                {
+                    m_Board.InitGame();
+                }
+                m_Board.Play(x, y, 2 - stepNum % 2);
+            }));
         }
 
         private void GameOver(int stepNum, int x, int y, bool isPass, bool isResign)
         {
-            ClientLog.WriteLog(")");
             MessageBox.Show("Over");
+
         }
 
         private void Window_Closed(object sender, EventArgs e)
