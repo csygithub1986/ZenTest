@@ -154,7 +154,12 @@
     <Resource Include="Images\red.png" />
     <Resource Include="Images\star.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\TcpServer\TcpServer.csproj">
+      <Project>{7b88a102-49de-458a-adc0-46cf22ac8989}</Project>
+      <Name>TcpServer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

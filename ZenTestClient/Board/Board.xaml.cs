@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ZenTestClient
 {
     /// <summary>
     /// 棋盘控件
-    /// 目前棋子用控件的形式效率很低，后期改进可以用一层单独绘制棋子
     /// </summary>
     public partial class Board : UserControl
     {
@@ -43,6 +35,8 @@ namespace ZenTestClient
         Ellipse[,] m_Stones;
         Rectangle m_LastPlayStone;
         Rectangle[,] m_Affects;
+        //Rectangle[,] m_PointChoises;
+        //Image m_ImageAffects;//不用层绘制，反而没有空间效率高，不知道为什么
 
 
         double m_GridSize;//
@@ -58,6 +52,10 @@ namespace ZenTestClient
         /// <param name="territory"></param>
         internal void ShowAffects(int[] territory)
         {
+            //不用层绘制，反而没有空间效率高，不知道为什么
+            //DrawingGroup dGroup = (m_ImageAffects.Source as DrawingImage).Drawing as DrawingGroup;
+            //using (DrawingContext dc = dGroup.Open())
+            //{
             for (int i = 0; i < BoardSize; i++)
             {
                 for (int j = 0; j < BoardSize; j++)
@@ -65,10 +63,14 @@ namespace ZenTestClient
                     byte color = (byte)(255 - (territory[i + j * BoardSize] + 1000) / 2000.0 * 255);
                     byte alpha = (byte)(Math.Abs(color - 127.5) / 127.5 * (255 - 100) + 100);
                     m_Affects[i, j].Fill = new SolidColorBrush(Color.FromArgb(alpha, color, color, color));
+                    //SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(alpha, color, color, color));
+                    //Rect rect = new Rect(m_Offset + (i - 0.5) * m_GridSize, m_Offset + (j - 0.5) * m_GridSize, m_GridSize, m_GridSize);
+                    //dc.DrawRectangle(brush, null, rect);
+
                 }
             }
+            //}
         }
-
 
         //Image[,] pieceImages;
         ////Image highlightImage;
@@ -307,6 +309,11 @@ namespace ZenTestClient
                 }
             }
 
+            //DrawingGroup dGroup = new DrawingGroup();
+            //DrawingImage dImageSource = new DrawingImage(dGroup);
+            //m_ImageAffects = new Image();
+            //m_ImageAffects.Source = dImageSource;
+            //m_Canvas.Children.Add(m_ImageAffects);
         }
 
         //画棋盘

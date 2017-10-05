@@ -19,6 +19,7 @@ namespace ZenTestClient
         public Action<int, int, int, bool, bool> UICallback;
         public Action<int, int, int, bool, bool> GameOverCallback;
         public Action<int[]> TerritoryCallback;
+        public Action<float> WinRateCallback;
 
         public Action<int> HandTurnCallback;//移交顺序
 
@@ -80,7 +81,6 @@ namespace ZenTestClient
                 DllImport.GetTopMoveInfo(0, ref x, ref y, ref count, ref winRate, null, 0);
 
 
-                Console.WriteLine(count + "winrate:" + winRate);
                 DealZenResult(stepNum, x, y, isPass, isResign, count, winRate);
             });
         }
@@ -142,7 +142,7 @@ namespace ZenTestClient
             }
 
             ClientLog.WriteLog(";" + (stepNum % 2 == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]");
-            Console.WriteLine(stepNum + " : " + x + " " + y);
+            //Console.WriteLine((stepNum % 2 == 0 ? "黑" : "白") + "  WinRate: " + x + " " + y);
 
 
             stepNum++;
@@ -205,16 +205,24 @@ namespace ZenTestClient
 
             DllImport.Play(x, y, 2 - stepNum % 2);
 
-            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
+            //因为GetTerritoryStatictics耗时，所以这样处理两次，让UI连续
+            int[] territoryStatictics = null;
             if (TerritoryCallback != null)
             {
-                int[] territoryStatictics = new int[m_BoardSize * m_BoardSize];
+                territoryStatictics = new int[m_BoardSize * m_BoardSize];
                 DllImport.GetTerritoryStatictics(territoryStatictics);
+            }
+
+            UICallback?.Invoke(stepNum, x, y, isPass, isResign);
+
+            if (TerritoryCallback != null)
+            {
                 TerritoryCallback.Invoke(territoryStatictics);
+                Console.WriteLine((stepNum % 2 == 0 ? "黑" : "白") + "走棋  黑胜率: " + (stepNum % 2 == 0 ? winRate : 1 - winRate).ToString("F2") + "  黑领先目数：" + (territoryStatictics.Sum() / 1000.0 - 6.5).ToString("F1"));
             }
 
             ClientLog.WriteLog(";" + (stepNum % 2 == 1 ? "W" : "B") + "[" + (char)('a' + x) + (char)('a' + y) + "]" + "C[胜率：" + winRate.ToString("F2") + "% count=" + count + "]");
-            Console.WriteLine(stepNum + " : " + x + " " + y);
+            WinRateCallback?.Invoke(stepNum % 2 == 0 ? winRate : 1 - winRate);
 
 
             stepNum++;

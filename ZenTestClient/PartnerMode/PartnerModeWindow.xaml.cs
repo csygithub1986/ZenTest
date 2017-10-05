@@ -10,8 +10,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TcpServer;
 
 namespace ZenTestClient
 {
@@ -35,6 +37,7 @@ namespace ZenTestClient
                 cal.GameOverCallback = GameOver;
                 cal.UICallback = Play;
                 cal.TerritoryCallback = ShowTerritory;
+                cal.WinRateCallback = ShowWinRate;
                 cal.Start();
 
             }
@@ -77,6 +80,30 @@ namespace ZenTestClient
         private void Window_Closed(object sender, EventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void ShowWinRate(float bRate)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                blackRate.Width = new GridLength(bRate, GridUnitType.Star);
+                whiteRate.Width = new GridLength(1 - bRate, GridUnitType.Star);
+                txtBlack.Text = bRate.ToString("F2");
+                txtWhite.Text = (1 - bRate).ToString("F2");
+            }));
+        }
+
+        //打开服务
+        private void Menu_OpenServerClick(object sender, RoutedEventArgs e)
+        {
+            Server tcpServer = new Server();
+            tcpServer.OnDataArrivedEvent += TcpServer_OnDataArrivedEvent;
+            tcpServer.Start();
+        }
+
+        private void TcpServer_OnDataArrivedEvent(byte[] obj)
+        {
+            Console.WriteLine("Tcp到来 " + obj.Length);
         }
     }
 }

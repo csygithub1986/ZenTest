@@ -17,15 +17,18 @@
                     <MenuItem Header="自我测试">
                         <MenuItem Header="VsSelf" Click="Menu_VsSelfClick"/>
                     </MenuItem>
+                    <MenuItem Header="打开服务">
+                        <MenuItem Header="打开服务" Click="Menu_OpenServerClick"/>
+                    </MenuItem>
                 </Menu>
             </ToolBar>
         </ToolBarPanel>
 
-        <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
-            <TextBlock TextWrapping="Wrap" Text="{Binding OutputMsg}"/>
-        </ScrollViewer>-->
-
         <Grid Name="grid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -38,6 +41,22 @@
             <Viewbox Grid.Column="1">
                 <local:Board x:Name="m_BoardAnalyse" BoardSize="19" BoardMode="Analyse"></local:Board>
             </Viewbox>
+
+            <Grid Grid.Column="1" Grid.Row="1" Background="Gray">
+                <Grid Height="30" Name="rateGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" Name="blackRate"/>
+                        <ColumnDefinition Width="*" Name="whiteRate"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Background="Black">
+                        <TextBlock Name="txtBlack" Text="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Background="White" Grid.Column="1">
+                        <TextBlock Name="txtWhite" Text="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            
         </Grid>
     </DockPanel>
 </Window>
