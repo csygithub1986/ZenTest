@@ -81,6 +81,8 @@
     <Compile Include="Research\ZenMethod.cs" />
     <Compile Include="Rule\IRule.cs" />
     <Compile Include="Rule\RuleDemo.cs" />
+    <Compile Include="Tcp\CommonDataDefine.cs" />
+    <Compile Include="Tcp\TcpDataHandler.cs" />
     <Page Include="Board\Board.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,6 +161,9 @@
       <Project>{7b88a102-49de-458a-adc0-46cf22ac8989}</Project>
       <Name>TcpServer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Tcp设计.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
